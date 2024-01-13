@@ -1,0 +1,1 @@
+cmd_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/kernel_module/my_module.mod := printf '%s\n'   kernel.o chars_trie.o | awk '!x[$$0]++ { print("/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/kernel_module/"$$0) }' > /home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/kernel_module/my_module.mod
