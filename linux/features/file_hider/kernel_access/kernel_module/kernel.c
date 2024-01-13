@@ -39,7 +39,7 @@ int set_addr_rw(unsigned long _addr) {
     unsigned int level;
     pte_t *pte = lookup_address(_addr, &level);
 
-//    if (pte->pte & ~_PAGE_RW) { // todo change back?
+//    if (pte->pte & ~_PAGE_RW) {
     if (!(pte->pte & _PAGE_RW)) {
         pte->pte |= _PAGE_RW;
     }

