@@ -13,9 +13,11 @@
 #include <fcntl.h>
 
 msg_to_user kernel_access::my_recv_msg() {
-    struct nlmsghdr *nlh = (struct nlmsghdr *) malloc(NLMSG_SPACE(MAX_PAYLOAD));
-    memset(nlh, 0, NLMSG_SPACE(MAX_PAYLOAD)); // initialized to zero
-    nlh->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
+    size_t msg_size = sizeof(msg_to_user);
+
+    struct nlmsghdr *nlh = (struct nlmsghdr *) malloc(NLMSG_SPACE(msg_size));
+    memset(nlh, 0, NLMSG_SPACE(msg_size)); // initialized to zero
+    nlh->nlmsg_len = NLMSG_SPACE(msg_size);
     nlh->nlmsg_pid = getpid(); // my pid
     nlh->nlmsg_flags = 0;
 
@@ -41,17 +43,16 @@ msg_to_user kernel_access::my_recv_msg() {
 }
 
 void kernel_access::my_send_msg(msg_to_module message) {
+    size_t msg_size = sizeof(msg_to_module);
+
     //nlh: contains "Hello" msg
-    struct nlmsghdr *nlh = (struct nlmsghdr *) malloc(NLMSG_SPACE(MAX_PAYLOAD));
-    memset(nlh, 0, NLMSG_SPACE(MAX_PAYLOAD)); // initialized to zero
-    nlh->nlmsg_len = NLMSG_SPACE(MAX_PAYLOAD);
+    struct nlmsghdr *nlh = (struct nlmsghdr *) malloc(NLMSG_SPACE(msg_size));
+    memset(nlh, 0, NLMSG_SPACE(msg_size)); // initialized to zero
+    nlh->nlmsg_len = NLMSG_SPACE(msg_size);
     nlh->nlmsg_pid = getpid();  //self pid
     nlh->nlmsg_flags = 0;
 
-    // todo can probably just copy the whole struct at once
-    // make sure sizeof(msg_to_module) isn't bigger than MAX_PAYLOAD
-    memcpy(NLMSG_DATA(nlh), (void *) &message.id, sizeof(OPER_ID));
-    memcpy(((char *) NLMSG_DATA(nlh)) + sizeof(OPER_ID), (void *) message.data, MAX_MSG_SIZE);
+    memcpy(NLMSG_DATA(nlh), (void*) &message, msg_size);
 
     struct iovec iov;
     memset((void *) &iov, '\x00', sizeof(iov)); // initialized to zero

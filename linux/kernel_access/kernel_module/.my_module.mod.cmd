@@ -1,0 +1,1 @@
+cmd_/home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/my_module.mod := printf '%s\n'   module.o chars_trie.o communicate.o hidden_files_trie.o | awk '!x[$$0]++ { print("/home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/"$$0) }' > /home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/my_module.mod

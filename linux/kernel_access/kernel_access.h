@@ -12,9 +12,8 @@
 #include "msg_to_user.h"
 
 #define NETLINK_USER 31
-#define MAX_PAYLOAD 1024 /* maximum payload size*/
 
-#define MODULE_DIR "/home/idan/CLionProjects/Rootkit/linux/file_hiding_access/kernel_access/kernel_module/"
+#define MODULE_DIR "/home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/"
 #define MODULE_NAME "my_module"
 #define MODULE_EXT ".ko"
 
