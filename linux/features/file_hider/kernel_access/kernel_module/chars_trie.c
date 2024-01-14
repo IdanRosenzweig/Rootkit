@@ -111,6 +111,10 @@ struct trie {
     struct node root;
 };
 
+struct node* get_root(struct trie *trie) {
+    return &trie->root;
+}
+
 void add_word(struct trie *trie, const char *str) {
     if (str[0] == '\x00')
         return;

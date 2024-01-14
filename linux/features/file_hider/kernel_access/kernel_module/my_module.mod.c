@@ -47,17 +47,20 @@ __used __section("__versions") = {
 	{ 0x262c9f92, "netlink_unicast" },
 	{ 0x9166fada, "strncpy" },
 	{ 0x25b29da6, "netlink_kernel_release" },
+	{ 0x98794516, "current_task" },
 	{ 0xfb578fc5, "memset" },
 	{ 0x5b8239ca, "__x86_return_thunk" },
 	{ 0x6b10bee1, "_copy_to_user" },
+	{ 0x41bc82e, "path_get" },
 	{ 0xeaa1fdc0, "kmalloc_trace" },
 	{ 0x754d539c, "strlen" },
 	{ 0xeb233a45, "__kmalloc" },
 	{ 0x4ca346e5, "kmalloc_caches" },
+	{ 0x6a2f2666, "d_path" },
 	{ 0xb83992f2, "module_layout" },
 };
 
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "861479F3B851EBD5BCF6F25");
+MODULE_INFO(srcversion, "7CF57C610407EAB336711B0");

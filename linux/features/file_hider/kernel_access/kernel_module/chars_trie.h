@@ -30,6 +30,8 @@ struct node *search(struct node* node, const char *str);
 
 struct trie;
 
+struct node* get_root(struct trie *trie);
+
 void add_word(struct trie *trie, const char *str);
 
 void remove_word(struct trie *trie, const char *str);

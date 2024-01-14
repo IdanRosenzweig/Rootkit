@@ -832,11 +832,143 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
     $(wildcard include/config/MODULES_USE_ELF_REL) \
     $(wildcard include/config/MODULES_USE_ELF_RELA) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/orc_types.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/interrupt.h \
-    $(wildcard include/config/IRQ_FORCED_THREADING) \
-    $(wildcard include/config/GENERIC_IRQ_PROBE) \
-    $(wildcard include/config/IRQ_TIMINGS) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/irqreturn.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dirent.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/file.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fdtable.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/nospec.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fs.h \
+    $(wildcard include/config/READ_ONLY_THP_FOR_FS) \
+    $(wildcard include/config/FS_POSIX_ACL) \
+    $(wildcard include/config/CGROUP_WRITEBACK) \
+    $(wildcard include/config/IMA) \
+    $(wildcard include/config/FILE_LOCKING) \
+    $(wildcard include/config/FSNOTIFY) \
+    $(wildcard include/config/FS_ENCRYPTION) \
+    $(wildcard include/config/FS_VERITY) \
+    $(wildcard include/config/EPOLL) \
+    $(wildcard include/config/UNICODE) \
+    $(wildcard include/config/QUOTA) \
+    $(wildcard include/config/FS_DAX) \
+    $(wildcard include/config/BLOCK) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/wait_bit.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kdev_t.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/kdev_t.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dcache.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/rculist_bl.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/list_bl.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/bit_spinlock.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/lockref.h \
+    $(wildcard include/config/ARCH_USE_CMPXCHG_LOCKREF) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/stringhash.h \
+    $(wildcard include/config/DCACHE_WORD_ACCESS) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/hash.h \
+    $(wildcard include/config/HAVE_ARCH_HASH) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/path.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/list_lru.h \
+    $(wildcard include/config/MEMCG_KMEM) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/shrinker.h \
+    $(wildcard include/config/SHRINKER_DEBUG) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/capability.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/capability.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/semaphore.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fcntl.h \
+    $(wildcard include/config/ARCH_32BIT_OFF_T) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/fcntl.h \
+  arch/x86/include/generated/uapi/asm/fcntl.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/asm-generic/fcntl.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/openat2.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/migrate_mode.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/percpu-rwsem.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/rcuwait.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/signal.h \
+    $(wildcard include/config/SCHED_AUTOGROUP) \
+    $(wildcard include/config/BSD_PROCESS_ACCT) \
+    $(wildcard include/config/TASKSTATS) \
+    $(wildcard include/config/STACK_GROWSUP) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/signal.h \
+    $(wildcard include/config/DYNAMIC_SIGFRAME) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/jobctl.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/task.h \
+    $(wildcard include/config/HAVE_EXIT_THREAD) \
+    $(wildcard include/config/ARCH_WANTS_DYNAMIC_TASK_STRUCT) \
+    $(wildcard include/config/HAVE_ARCH_THREAD_STRUCT_WHITELIST) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/uaccess.h \
+    $(wildcard include/config/ARCH_HAS_SUBPAGE_FAULTS) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fault-inject-usercopy.h \
+    $(wildcard include/config/FAULT_INJECTION_USERCOPY) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/uaccess.h \
+    $(wildcard include/config/CC_HAS_ASM_GOTO_OUTPUT) \
+    $(wildcard include/config/CC_HAS_ASM_GOTO_TIED_OUTPUT) \
+    $(wildcard include/config/ARCH_HAS_COPY_MC) \
+    $(wildcard include/config/X86_INTEL_USERCOPY) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/smap.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/extable.h \
+    $(wildcard include/config/BPF_JIT) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/asm-generic/access_ok.h \
+    $(wildcard include/config/ALTERNATE_USER_ADDRESS_SPACE) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/uaccess_64.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/cred.h \
+    $(wildcard include/config/DEBUG_CREDENTIALS) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/key.h \
+    $(wildcard include/config/KEY_NOTIFICATIONS) \
+    $(wildcard include/config/NET) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/assoc_array.h \
+    $(wildcard include/config/ASSOCIATIVE_ARRAY) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/user.h \
+    $(wildcard include/config/VFIO_PCI_ZDEV_KVM) \
+    $(wildcard include/config/WATCH_QUEUE) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/percpu_counter.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/ratelimit.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/rcu_sync.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/delayed_call.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/uuid.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/uuid.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/errseq.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/ioprio.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/rt.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/iocontext.h \
+    $(wildcard include/config/BLK_ICQ) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/ioprio.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fs_types.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/mount.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/mnt_idmapping.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/slab.h \
+    $(wildcard include/config/DEBUG_SLAB) \
+    $(wildcard include/config/FAILSLAB) \
+    $(wildcard include/config/KFENCE) \
+    $(wildcard include/config/SLAB) \
+    $(wildcard include/config/SLUB) \
+    $(wildcard include/config/SLOB) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/overflow.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/percpu-refcount.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kasan.h \
+    $(wildcard include/config/KASAN_STACK) \
+    $(wildcard include/config/KASAN_VMALLOC) \
+    $(wildcard include/config/KASAN_INLINE) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kasan-enabled.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/fs.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/quota.h \
+    $(wildcard include/config/QUOTA_NETLINK_INTERFACE) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/dqblk_xfs.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dqblk_v1.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dqblk_v2.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dqblk_qtree.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/projid.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/quota.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/nfs_fs_i.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fs_struct.h \
+  /home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/kernel_module/communicate.c \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/net/sock.h \
+    $(wildcard include/config/IPV6) \
+    $(wildcard include/config/SOCK_RX_QUEUE_MAPPING) \
+    $(wildcard include/config/NET_RX_BUSY_POLL) \
+    $(wildcard include/config/XFRM) \
+    $(wildcard include/config/SOCK_VALIDATE_XMIT) \
+    $(wildcard include/config/RPS) \
+    $(wildcard include/config/MPTCP) \
+    $(wildcard include/config/SOCK_CGROUP_DATA) \
+    $(wildcard include/config/INET) \
+    $(wildcard include/config/TLS_DEVICE) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/hardirq.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/context_tracking_state.h \
     $(wildcard include/config/CONTEXT_TRACKING_USER) \
@@ -855,29 +987,6 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
     $(wildcard include/config/X86_MCE_AMD) \
     $(wildcard include/config/X86_HV_CALLBACK_VECTOR) \
     $(wildcard include/config/HYPERV) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/irq.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/irq_vectors.h \
-    $(wildcard include/config/X86_IO_APIC) \
-    $(wildcard include/config/PCI_MSI) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/sections.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/asm-generic/sections.h \
-    $(wildcard include/config/HAVE_FUNCTION_DESCRIPTORS) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/extable.h \
-    $(wildcard include/config/BPF_JIT) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dirent.h \
-  /home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/kernel_module/communicate.c \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/net/sock.h \
-    $(wildcard include/config/IPV6) \
-    $(wildcard include/config/SOCK_RX_QUEUE_MAPPING) \
-    $(wildcard include/config/NET_RX_BUSY_POLL) \
-    $(wildcard include/config/XFRM) \
-    $(wildcard include/config/SOCK_VALIDATE_XMIT) \
-    $(wildcard include/config/NET) \
-    $(wildcard include/config/RPS) \
-    $(wildcard include/config/MPTCP) \
-    $(wildcard include/config/SOCK_CGROUP_DATA) \
-    $(wildcard include/config/INET) \
-    $(wildcard include/config/TLS_DEVICE) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/list_nulls.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/netdevice.h \
     $(wildcard include/config/DCB) \
@@ -953,7 +1062,6 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/asm-generic/sockios.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/sockios.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/uio.h \
-    $(wildcard include/config/ARCH_HAS_COPY_MC) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/uio.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/socket.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/in6.h \
@@ -988,7 +1096,6 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
     $(wildcard include/config/IPV6_MROUTE_MULTIPLE_TABLES) \
     $(wildcard include/config/NF_DEFRAG_IPV6) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/net/dst_ops.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/percpu_counter.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/icmpv6.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/net/netns/nexthop.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/net/netns/ieee802154_6lowpan.h \
@@ -1048,121 +1155,6 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
     $(wildcard include/config/NETFILTER_XT_TARGET_TRACE) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/bvec.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/highmem.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fs.h \
-    $(wildcard include/config/READ_ONLY_THP_FOR_FS) \
-    $(wildcard include/config/FS_POSIX_ACL) \
-    $(wildcard include/config/CGROUP_WRITEBACK) \
-    $(wildcard include/config/IMA) \
-    $(wildcard include/config/FILE_LOCKING) \
-    $(wildcard include/config/FSNOTIFY) \
-    $(wildcard include/config/FS_ENCRYPTION) \
-    $(wildcard include/config/FS_VERITY) \
-    $(wildcard include/config/EPOLL) \
-    $(wildcard include/config/UNICODE) \
-    $(wildcard include/config/QUOTA) \
-    $(wildcard include/config/FS_DAX) \
-    $(wildcard include/config/BLOCK) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/wait_bit.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kdev_t.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/kdev_t.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dcache.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/rculist_bl.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/list_bl.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/bit_spinlock.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/lockref.h \
-    $(wildcard include/config/ARCH_USE_CMPXCHG_LOCKREF) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/stringhash.h \
-    $(wildcard include/config/DCACHE_WORD_ACCESS) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/hash.h \
-    $(wildcard include/config/HAVE_ARCH_HASH) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/path.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/list_lru.h \
-    $(wildcard include/config/MEMCG_KMEM) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/shrinker.h \
-    $(wildcard include/config/SHRINKER_DEBUG) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/capability.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/capability.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/semaphore.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fcntl.h \
-    $(wildcard include/config/ARCH_32BIT_OFF_T) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/fcntl.h \
-  arch/x86/include/generated/uapi/asm/fcntl.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/asm-generic/fcntl.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/openat2.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/migrate_mode.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/percpu-rwsem.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/rcuwait.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/signal.h \
-    $(wildcard include/config/SCHED_AUTOGROUP) \
-    $(wildcard include/config/BSD_PROCESS_ACCT) \
-    $(wildcard include/config/TASKSTATS) \
-    $(wildcard include/config/STACK_GROWSUP) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/signal.h \
-    $(wildcard include/config/DYNAMIC_SIGFRAME) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/jobctl.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/task.h \
-    $(wildcard include/config/HAVE_EXIT_THREAD) \
-    $(wildcard include/config/ARCH_WANTS_DYNAMIC_TASK_STRUCT) \
-    $(wildcard include/config/HAVE_ARCH_THREAD_STRUCT_WHITELIST) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/uaccess.h \
-    $(wildcard include/config/ARCH_HAS_SUBPAGE_FAULTS) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fault-inject-usercopy.h \
-    $(wildcard include/config/FAULT_INJECTION_USERCOPY) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/uaccess.h \
-    $(wildcard include/config/CC_HAS_ASM_GOTO_OUTPUT) \
-    $(wildcard include/config/CC_HAS_ASM_GOTO_TIED_OUTPUT) \
-    $(wildcard include/config/X86_INTEL_USERCOPY) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/smap.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/asm-generic/access_ok.h \
-    $(wildcard include/config/ALTERNATE_USER_ADDRESS_SPACE) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/uaccess_64.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/cred.h \
-    $(wildcard include/config/DEBUG_CREDENTIALS) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/key.h \
-    $(wildcard include/config/KEY_NOTIFICATIONS) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/assoc_array.h \
-    $(wildcard include/config/ASSOCIATIVE_ARRAY) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/user.h \
-    $(wildcard include/config/VFIO_PCI_ZDEV_KVM) \
-    $(wildcard include/config/WATCH_QUEUE) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/ratelimit.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/rcu_sync.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/delayed_call.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/uuid.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/uuid.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/errseq.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/ioprio.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/sched/rt.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/iocontext.h \
-    $(wildcard include/config/BLK_ICQ) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/ioprio.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/fs_types.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/mount.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/mnt_idmapping.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/slab.h \
-    $(wildcard include/config/DEBUG_SLAB) \
-    $(wildcard include/config/FAILSLAB) \
-    $(wildcard include/config/KFENCE) \
-    $(wildcard include/config/SLAB) \
-    $(wildcard include/config/SLUB) \
-    $(wildcard include/config/SLOB) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/overflow.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/percpu-refcount.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kasan.h \
-    $(wildcard include/config/KASAN_STACK) \
-    $(wildcard include/config/KASAN_VMALLOC) \
-    $(wildcard include/config/KASAN_INLINE) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kasan-enabled.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/fs.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/quota.h \
-    $(wildcard include/config/QUOTA_NETLINK_INTERFACE) \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/dqblk_xfs.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dqblk_v1.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dqblk_v2.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/dqblk_qtree.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/projid.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/quota.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/nfs_fs_i.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/cacheflush.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/cacheflush.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/mm.h \
@@ -1219,6 +1211,7 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
   /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/pgtable_64.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/fixmap.h \
     $(wildcard include/config/PROVIDE_OHCI1394_DMA_INIT) \
+    $(wildcard include/config/X86_IO_APIC) \
     $(wildcard include/config/PCI_MMCONFIG) \
     $(wildcard include/config/ACPI_APEI_GHES) \
     $(wildcard include/config/INTEL_TXT) \
@@ -1355,6 +1348,17 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
     $(wildcard include/config/FANOTIFY) \
     $(wildcard include/config/PERSISTENT_KEYRINGS) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kernel_stat.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/interrupt.h \
+    $(wildcard include/config/IRQ_FORCED_THREADING) \
+    $(wildcard include/config/GENERIC_IRQ_PROBE) \
+    $(wildcard include/config/IRQ_TIMINGS) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/irqreturn.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/irq.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/irq_vectors.h \
+    $(wildcard include/config/PCI_MSI) \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/arch/x86/include/asm/sections.h \
+  /usr/src/linux-headers-6.1.0-1parrot1-common/include/asm-generic/sections.h \
+    $(wildcard include/config/HAVE_FUNCTION_DESCRIPTORS) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/cgroup-defs.h \
     $(wildcard include/config/CGROUP_NET_CLASSID) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/bpf-cgroup-defs.h \
@@ -1381,7 +1385,6 @@ deps_/home/idan/CLionProjects/Rootkit/linux/features/file_hider/kernel_access/ke
     $(wildcard include/config/SECURITY_PATH) \
     $(wildcard include/config/SECURITYFS) \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/kernel_read_file.h \
-  /usr/src/linux-headers-6.1.0-1parrot1-common/include/linux/file.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/netlink.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/netdevice.h \
   /usr/src/linux-headers-6.1.0-1parrot1-common/include/uapi/linux/if.h \
