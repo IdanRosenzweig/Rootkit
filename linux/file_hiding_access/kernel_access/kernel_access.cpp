@@ -9,7 +9,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string>
-#include <linux/module.h>
 #include <sys/syscall.h>
 #include <fcntl.h>
 
