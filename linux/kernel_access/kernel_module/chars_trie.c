@@ -91,6 +91,8 @@ void remove_child(struct node *node, char val) {
 }
 
 struct node *search(struct node *node, const char *str) {
+    if (node == 0) return 0;
+
     struct node *curr_node = node;
 
     for (int i = 0; str[i] != '\x00'; i++) {
@@ -174,12 +176,11 @@ int is_prefix(struct trie *trie, const char *str) {
     return node != 0;
 }
 
-// does the trie contains some word which is a prefix of str
-int contains_prefix(struct trie *trie, const char *str) {
-    if (str[0] == '\x00')
+int node_contains_prefix(struct node* node, const char *str) {
+    if (str[0] == '\x00' || node == 0)
         return 0;
 
-    struct node *curr_node = &trie->root;
+    struct node *curr_node = node;
 
     for (int i = 0; str[i] != '\x00'; i++) {
         char c = str[i];
@@ -193,6 +194,10 @@ int contains_prefix(struct trie *trie, const char *str) {
     }
 
     return 0;
+}
+// does the trie contains some word which is a prefix of str
+int contains_prefix(struct trie *trie, const char *str) {
+    return node_contains_prefix(&trie->root, str);
 }
 
 struct trie *create_trie(void) {

@@ -34,6 +34,7 @@ __used __section("__versions") = {
 	{ 0x82c87431, "param_ops_ulong" },
 	{ 0x13c49cc2, "_copy_from_user" },
 	{ 0xb0e602eb, "memmove" },
+	{ 0x9f3f8ed, "fget" },
 	{ 0x37a0cba, "kfree" },
 	{ 0xddfe23c8, "__netlink_kernel_create" },
 	{ 0x8b9200fd, "lookup_address" },
@@ -43,6 +44,7 @@ __used __section("__versions") = {
 	{ 0x92997ed8, "_printk" },
 	{ 0xd0da656b, "__stack_chk_fail" },
 	{ 0x8b73082f, "__alloc_skb" },
+	{ 0xea378e6, "fput" },
 	{ 0xed2d354b, "init_net" },
 	{ 0x262c9f92, "netlink_unicast" },
 	{ 0x9166fada, "strncpy" },
@@ -51,7 +53,6 @@ __used __section("__versions") = {
 	{ 0xfb578fc5, "memset" },
 	{ 0x5b8239ca, "__x86_return_thunk" },
 	{ 0x6b10bee1, "_copy_to_user" },
-	{ 0x41bc82e, "path_get" },
 	{ 0xeaa1fdc0, "kmalloc_trace" },
 	{ 0x754d539c, "strlen" },
 	{ 0xeb233a45, "__kmalloc" },
@@ -63,4 +64,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "0AFE45944355FEB89FE04FA");
+MODULE_INFO(srcversion, "274E1C899491A2733962B3D");

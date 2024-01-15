@@ -42,6 +42,9 @@ int contains_word(struct trie *trie, const char *str);
 // does the trie contains some word which has this prefix
 int is_prefix(struct trie *trie, const char *str);
 
+// is there prefix starting from this node
+int node_contains_prefix(struct node *node, const char *str);
+
 // does the trie contains some word which is a prefix of str
 int contains_prefix(struct trie *trie, const char *str);
 

