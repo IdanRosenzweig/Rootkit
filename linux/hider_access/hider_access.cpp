@@ -2,7 +2,7 @@
 // Created by idan on 1/11/24.
 //
 
-#include "file_hiding_access.h"
+#include "hider_access.h"
 #include <cstring>
 #include <string>
 #include <iostream>
