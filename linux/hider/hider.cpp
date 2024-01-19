@@ -2,7 +2,7 @@
 // Created by idan on 1/11/24.
 //
 
-#include "hider_access.h"
+#include "hider.h"
 #include <cstring>
 #include <string>
 #include <iostream>

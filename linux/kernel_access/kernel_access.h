@@ -13,6 +13,7 @@
 
 #define NETLINK_USER 31
 
+//#define MODULE_DIR "/home/idan/CLionProjects/Rootkit/linux/build/"
 #define MODULE_DIR "/home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/"
 #define MODULE_NAME "my_module"
 #define MODULE_EXT ".ko"

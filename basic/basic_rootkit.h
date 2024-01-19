@@ -35,7 +35,7 @@ public:
 //    void load_plugin(std::unique_ptr<T>&& plugin) {
 //        static_assert(std::is_base_of<basic_plugin, T>());
 //
-//        features.push_back(
+//        plugins.push_back(
 //                std::unique_ptr<basic_plugin>(
 //                        static_cast<basic_plugin *>(plugin.release()) // todo change to dynamic cast if it doesn't work
 //                )
@@ -83,7 +83,7 @@ public:
 //    virtual void stop_rootkit() {}
 //
 //    void stop_all() {
-//        for (const std::unique_ptr<basic_plugin> &item: features) {
+//        for (const std::unique_ptr<basic_plugin> &item: plugins) {
 //            item->stop();
 //        }
 //    }

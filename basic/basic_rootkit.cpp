@@ -39,7 +39,7 @@ id_value basic_rootkit::load_plugin(std::unique_ptr<basic_plugin> &&plugin) {
 }
 
 void basic_rootkit::unload_plugin(id_value id_val) {
-    // find corresponding plugin in the features' set
+    // find corresponding plugin in the plugins' set
     auto plug = plugins.find(id_val);
 
     if (plug != plugins.end()) { // if found

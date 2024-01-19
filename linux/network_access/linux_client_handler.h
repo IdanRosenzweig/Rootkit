@@ -5,7 +5,7 @@
 #ifndef ROOTKIT_LINUX_CLIENT_HANDLER_H
 #define ROOTKIT_LINUX_CLIENT_HANDLER_H
 
-#include "basic_client_handler.h"
+#include "../../basic/network/basic_client_handler.h"
 
 class linux_client_handler : public basic_client_handler {
 protected:

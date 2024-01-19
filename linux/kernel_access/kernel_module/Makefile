@@ -34,7 +34,7 @@ $(MOD_NAME)-y := $(OBJECTS)
 .PHONY: $(MOD_NAME).ko
 $(MOD_NAME).ko:
 	make -C $(KERNEL) M=$(KMOD_DIR) modules
-	mv -n $(KMOD_DIR)/$(MOD_NAME).ko $(OUTPUT_DIR)/$(MOD_NAME).ko
+	cp -n $(KMOD_DIR)/$(MOD_NAME).ko $(OUTPUT_DIR)/$(MOD_NAME).ko
 
 cxx-prefix := " CXX [M] "
 

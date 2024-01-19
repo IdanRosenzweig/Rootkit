@@ -3,12 +3,12 @@
 //
 
 #include <unistd.h>
-#include "shell_command_tcp_port_listener.h"
+#include "cli_shell_listener.h"
 
-void shell_command_tcp_port_listener::listen() {
+void cli_shell_listener::listen() {
     while (1) {
         puts("waiting for a client");
-        std::unique_ptr<basic_client_handler> new_client = accept_new_connection->operator()();
+        std::unique_ptr<basic_client_handler> new_client = accept_new_connection->next_client();
 
         puts("client connection established");
 
@@ -27,6 +27,8 @@ void shell_command_tcp_port_listener::listen() {
 
                 command += ch;
             }
+            if (command == "exit")
+                goto close;
 
             puts(command.c_str());
 
@@ -40,7 +42,7 @@ void shell_command_tcp_port_listener::listen() {
     }
 }
 
-std::string shell_command_tcp_port_listener::pop_next_command() {
+std::string cli_shell_listener::pop_next_command() {
     while (commands_queue.empty()) {
     }
 

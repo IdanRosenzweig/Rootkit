@@ -4,7 +4,7 @@
 
 #include "network_access.h"
 #include "linux_client_handler.h"
-#include "tcp/linux_tcp_port_connection_establisher.h"
+#include "linux_tcp_connection_establisher.h"
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -72,10 +72,8 @@ void close_tcp_port(tcp_port port) {
     open_tcp_ports.erase(port);
 }
 
-void assign_tcp_port_connection_establisher(basic_tcp_port_listener &listener, tcp_port required_port) {
-    listener.setConnectionEstablisher(
-            std::make_unique<linux_tcp_port_connection_establisher>(open_tcp_ports[required_port])
-    );
+std::unique_ptr<basic_connection_establisher> generate_tcp_port_connection_establisher(tcp_port port) {
+    return std::make_unique<linux_tcp_connection_establisher>(open_tcp_ports[port]);
 }
 
 std::vector<tcp_port> get_all_open_tcp_ports() {
@@ -89,11 +87,4 @@ std::vector<tcp_port> get_all_open_tcp_ports() {
 size_t count_open_tcp_ports() {
     return open_tcp_ports.size();
 }
-
-void recheck_open_tcp_ports() {
-
-}
-
-
-
 

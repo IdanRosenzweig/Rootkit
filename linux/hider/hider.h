@@ -2,8 +2,8 @@
 // Created by idan on 1/11/24.
 //
 
-#ifndef ROOTKIT_HIDER_ACCESS_H
-#define ROOTKIT_HIDER_ACCESS_H
+#ifndef ROOTKIT_HIDER_H
+#define ROOTKIT_HIDER_H
 
 #include "../kernel_access/kernel_access.h"
 
@@ -23,4 +23,4 @@ void unhide_tcp6_port(PORT port);
 
 void reports_test();
 
-#endif //ROOTKIT_HIDER_ACCESS_H
+#endif //ROOTKIT_HIDER_H
