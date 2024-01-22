@@ -31,17 +31,6 @@ protected:
 
 public:
 
-//    template<class T>
-//    void load_plugin(std::unique_ptr<T>&& plugin) {
-//        static_assert(std::is_base_of<basic_plugin, T>());
-//
-//        plugins.push_back(
-//                std::unique_ptr<basic_plugin>(
-//                        static_cast<basic_plugin *>(plugin.release()) // todo change to dynamic cast if it doesn't work
-//                )
-//        );
-//    }
-
     // load new plugin to the set, assign a unique id to it and save the id in the map
     id_value load_plugin(std::unique_ptr<basic_plugin> &&plugin);
 
@@ -78,15 +67,6 @@ public:
     }
 
     void run_all(bool in_new_thread = true);
-
-
-//    virtual void stop_rootkit() {}
-//
-//    void stop_all() {
-//        for (const std::unique_ptr<basic_plugin> &item: plugins) {
-//            item->stop();
-//        }
-//    }
 
 };
 

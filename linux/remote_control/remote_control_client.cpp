@@ -12,7 +12,6 @@
 #include "msg_to_rootkit.h"
 #include "msg_to_controller.h"
 
-
 void remote_control_client::run() {
 
     linux_client client(server_port, server_addr);

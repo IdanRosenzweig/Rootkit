@@ -12,15 +12,13 @@
 #include <cstring>
 #include <map>
 
+#include "../error_codes.h"
+
 static std::map<TCP_PORT, int> open_tcp_ports; // {tcp port, its open socket fd}
 
 void open_tcp_port(TCP_PORT port) {
     if (open_tcp_ports.contains(port))
         return;
-
-#define SOCKET_ERROR (-1)
-#define BIND_ERROR (-1)
-#define LISTEN_ERROR (-1)
 
     int sd = SOCKET_ERROR;
     struct sockaddr_in addr;

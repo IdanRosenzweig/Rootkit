@@ -29,7 +29,7 @@ add_executable(Rootkit
         file_system_access/fs_access.cpp
 
         # linux network access
-        network_access/basic_network_access.cpp
+        network_access/network_access.cpp
 
         network_access/linux_client_handler.cpp
         network_access/linux_client_handler.h
@@ -70,6 +70,8 @@ add_executable(Rootkit
         rootkit_main.cpp # contains main function
 
 )
+target_compile_definitions(Rootkit PUBLIC MODULE_DIR=${MODULE_DIR})
+target_compile_definitions(Rootkit PUBLIC MODULE_NAME=${MODULE_NAME})
 
 add_executable(Remote_controller
 

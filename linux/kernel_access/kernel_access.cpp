@@ -14,6 +14,21 @@
 #include <sys/syscall.h>
 #include <fcntl.h>
 
+#define NETLINK_USER 31
+
+
+#ifndef MODULE_DIR
+#error module dir is not defined
+//#define MODULE_DIR "/home/name/"
+#endif
+
+#ifndef MODULE_NAME
+#error module name is not defined
+//#define MODULE_NAME "my_module"
+#endif
+
+#define MODULE_EXT ""
+
 msg_to_user kernel_access::my_recv_msg() {
     size_t msg_size = sizeof(msg_to_user);
 
@@ -102,6 +117,7 @@ kernel_access::kernel_access() {
 
 //    syscall(SYS_delete_module, MODULE_NAME, 0); // unload previous used module
     // load the module
+    puts(MODULE_DIR);
     int fd = open(MODULE_DIR MODULE_NAME MODULE_EXT, O_RDONLY);
     if (syscall(SYS_finit_module, fd, params, 0) == SYSCALL_ERROR) {
         close(fd);
