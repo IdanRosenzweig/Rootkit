@@ -5,16 +5,6 @@
 #ifndef ROOTKIT_TCP_PORT_H
 #define ROOTKIT_TCP_PORT_H
 
-struct tcp_port {
-    int num;
-
-    operator int() {
-        return num;
-    }
-
-    bool operator<(const tcp_port &rhs) const {
-        return num < rhs.num;
-    }
-};
+#define TCP_PORT int
 
 #endif //ROOTKIT_TCP_PORT_H

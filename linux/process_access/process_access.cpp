@@ -2,8 +2,10 @@
 // Created by idan on 12/26/23.
 //
 
-#include "process_access.h"
-#include "../file_system_access/file_system_access.h"
+#include "../../basic/process/basic_process_access.h"
+#include "../../basic/fs/basic_fs_access.h"
+
+#include "../error_codes.h"
 
 #include <string.h>
 #include <signal.h>
@@ -62,7 +64,6 @@ std::vector<std::string> get_proc_argument_variables(int pid) {
     std::string path{"/proc/" + std::to_string(pid) + "/cmdline"};
 
     int fd = open(path.c_str(), O_RDONLY);
-#define OPEN_ERROR (-1)
     if (fd == OPEN_ERROR)
         return {};
 
@@ -84,19 +85,4 @@ std::vector<std::string> get_proc_argument_variables(int pid) {
     return vars;
 }
 
-//void print() {
-//    auto procs = find_all_procs_pids();
-//
-//    for (int pid: procs) {
-//        std::cout << "pid: " << pid << "\n"
-//                  << "exec: " << get_proc_exec(pid) << "\n"
-//                  << "cwd: " << get_proc_cwd(pid) << "\n"
-//                  << "arguments: ";
-//
-//        for (const std::string &var: get_proc_argument_variables(pid))
-//            std::cout << var << " ";
-//
-//        std::cout << "\n\n";
-//    }
-//}
 

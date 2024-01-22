@@ -2,8 +2,8 @@
 // Created by idan on 12/26/23.
 //
 
-#ifndef ROOTKIT_PROCESS_ACCESS_H
-#define ROOTKIT_PROCESS_ACCESS_H
+#ifndef ROOTKIT_BASIC_PROCESS_ACCESS_H
+#define ROOTKIT_BASIC_PROCESS_ACCESS_H
 
 #include <vector>
 #include <string>
@@ -24,4 +24,4 @@ std::string get_proc_cwd(int pid);
 std::vector<std::string> get_proc_argument_variables(int pid);
 
 
-#endif //ROOTKIT_PROCESS_ACCESS_H
+#endif //ROOTKIT_BASIC_PROCESS_ACCESS_H

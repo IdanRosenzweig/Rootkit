@@ -2,7 +2,7 @@
 // Created by idan on 12/30/23.
 //
 
-#include "network_access.h"
+#include "../../basic/network/basic_network_access.h"
 #include "linux_client_handler.h"
 #include "linux_tcp_connection_establisher.h"
 
@@ -12,9 +12,9 @@
 #include <cstring>
 #include <map>
 
-static std::map<tcp_port, int> open_tcp_ports; // {tcp port, its open socket fd}
+static std::map<TCP_PORT, int> open_tcp_ports; // {tcp port, its open socket fd}
 
-void open_tcp_port(tcp_port port) {
+void open_tcp_port(TCP_PORT port) {
     if (open_tcp_ports.contains(port))
         return;
 
@@ -62,7 +62,7 @@ void open_tcp_port(tcp_port port) {
     }
 }
 
-void close_tcp_port(tcp_port port) {
+void close_tcp_port(TCP_PORT port) {
     if (!open_tcp_ports.contains(port))
         return;
 
@@ -72,12 +72,13 @@ void close_tcp_port(tcp_port port) {
     open_tcp_ports.erase(port);
 }
 
-std::unique_ptr<basic_connection_establisher> generate_tcp_port_connection_establisher(tcp_port port) {
-    return std::make_unique<linux_tcp_connection_establisher>(open_tcp_ports[port]);
+std::unique_ptr<basic_connection_establisher> generate_tcp_port_connection_establisher(TCP_PORT port) {
+    int fd = open_tcp_ports[port];
+    return std::make_unique<linux_tcp_connection_establisher>(fd);
 }
 
-std::vector<tcp_port> get_all_open_tcp_ports() {
-    std::vector<tcp_port> open_ports;
+std::vector<TCP_PORT> get_all_open_tcp_ports() {
+    std::vector<TCP_PORT> open_ports;
     for (const auto &ent: open_tcp_ports)
         open_ports.push_back(ent.first);
 

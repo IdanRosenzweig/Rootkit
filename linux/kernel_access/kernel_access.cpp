@@ -4,6 +4,8 @@
 
 #include "kernel_access.h"
 
+#include "../error_codes.h"
+
 #include <linux/netlink.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -101,7 +103,7 @@ kernel_access::kernel_access() {
 //    syscall(SYS_delete_module, MODULE_NAME, 0); // unload previous used module
     // load the module
     int fd = open(MODULE_DIR MODULE_NAME MODULE_EXT, O_RDONLY);
-    if (syscall(SYS_finit_module, fd, params, 0) == -1) {
+    if (syscall(SYS_finit_module, fd, params, 0) == SYSCALL_ERROR) {
         close(fd);
         perror("init_module syscall error");
         throw;
@@ -113,7 +115,7 @@ kernel_access::kernel_access() {
 
     // open socket fd
     sock_fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);
-    if (sock_fd < 0) {
+    if (sock_fd == SOCKET_ERROR) {
         perror("socket error");
         throw;
     }
@@ -124,7 +126,7 @@ kernel_access::kernel_access() {
     src_addr.nl_family = AF_NETLINK;
     src_addr.nl_pid = getpid(); /* my pid */
 
-    if (bind(sock_fd, (struct sockaddr *) &src_addr, sizeof(src_addr)) == -1) {
+    if (bind(sock_fd, (struct sockaddr *) &src_addr, sizeof(src_addr)) == BIND_ERROR) {
         perror("bind error");
         close(sock_fd);
         throw;

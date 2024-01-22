@@ -15,9 +15,8 @@ public:
 
     void setSocketFd(int socketFd);
 
-    int read_from_client(char *buff, int count) override;
-
-    int write_to_client(char *buff, int count) override;
+    int recv_data(char *buff, int count) override;
+    int send_data(const char *buff, int count) override;
 
     // todo deconstructor that closes socket_fd
 };

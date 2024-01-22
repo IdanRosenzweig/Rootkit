@@ -5,10 +5,11 @@
 #ifndef ROOTKIT_BASIC_CLIENT_HANDLER_H
 #define ROOTKIT_BASIC_CLIENT_HANDLER_H
 
+// used by servers to handle clients
 class basic_client_handler {
 public:
-    virtual int read_from_client(char* buff, int count) = 0; // returns the number of bytes actually read
-    virtual int write_to_client(char* buff, int count) = 0; // returns the number of bytes actually written
+    virtual int recv_data(char* buff, int count) = 0;
+    virtual int send_data(const char* buff, int count) = 0;
 };
 
 #endif //ROOTKIT_BASIC_CLIENT_HANDLER_H
