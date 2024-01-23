@@ -1,1 +1,0 @@
-cmd_/home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/modules.order := {   echo /home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/my_module.ko; :; } > /home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module/modules.order

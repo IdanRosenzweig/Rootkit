@@ -1,7 +1,9 @@
-MOD_NAME := my_module
+# those 2 can be overridden
+MOD_NAME := my_kernel_module
+OUTPUT_DIR := ./
+
 KERNEL := /lib/modules/$(shell uname -r)/build
 KMOD_DIR := /home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module
-OUTPUT_DIR := ./
 CXX := g++
 FLAGS := -Wall
 
@@ -35,6 +37,7 @@ $(MOD_NAME)-y := $(OBJECTS)
 $(MOD_NAME).ko:
 	make -C $(KERNEL) M=$(KMOD_DIR) modules
 	cp -n $(KMOD_DIR)/$(MOD_NAME).ko $(OUTPUT_DIR)/$(MOD_NAME)
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
 
 cxx-prefix := " CXX [M] "
 

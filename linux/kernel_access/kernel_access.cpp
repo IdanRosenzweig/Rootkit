@@ -14,20 +14,6 @@
 #include <sys/syscall.h>
 #include <fcntl.h>
 
-#define NETLINK_USER 31
-
-
-#ifndef MODULE_DIR
-#error module dir is not defined
-//#define MODULE_DIR "/home/name/"
-#endif
-
-#ifndef MODULE_NAME
-#error module name is not defined
-//#define MODULE_NAME "my_module"
-#endif
-
-#define MODULE_EXT ""
 
 msg_to_user kernel_access::my_recv_msg() {
     size_t msg_size = sizeof(msg_to_user);

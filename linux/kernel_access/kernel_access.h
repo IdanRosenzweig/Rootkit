@@ -11,6 +11,19 @@
 #include "msg_to_module.h"
 #include "msg_to_user.h"
 
+
+#ifndef MODULE_DIR
+#error module dir is not defined
+#endif
+
+#ifndef MODULE_NAME
+#error module name is not defined
+#endif
+
+#define MODULE_EXT ""
+
+#define NETLINK_USER 31
+
 class kernel_access {
 private:
     int sock_fd;
