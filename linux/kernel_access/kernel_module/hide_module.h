@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/17/24.
-//
-
 #ifndef ROOTKIT_HIDE_MOFULE_H
 #define ROOTKIT_HIDE_MOFULE_H
 

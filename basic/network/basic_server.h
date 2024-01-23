@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/30/23.
-//
-
 #ifndef ROOTKIT_BASIC_SERVER_H
 #define ROOTKIT_BASIC_SERVER_H
 
@@ -15,23 +11,22 @@ class basic_server {
 protected:
     std::unique_ptr<basic_connection_establisher> connectionEstablisher = nullptr;
 
-    std::unique_ptr<basic_client_handler> accept_next_client() {
-        return connectionEstablisher->next_client();
-    }
+    std::unique_ptr<basic_client_handler> curr_client = nullptr;
 
 public:
-    void setConnectionEstablisher(std::unique_ptr<basic_connection_establisher>&&connectionEstablisher) {
-//        basic_server::connectionEstablisher.reset(connectionEstablisher.release());
-        basic_server::connectionEstablisher = std::move(connectionEstablisher);
-    }
+    void setConnectionEstablisher(std::unique_ptr<basic_connection_establisher>&&connectionEstablisher);
 
-    // is there a linux_client connected right now
-    virtual bool is_client_connected() = 0;
+    void accept_next_client();
 
-    virtual const std::unique_ptr<basic_client_handler>& get_connected_client() = 0;
+    // is there a client connected right now
+    bool is_client_connected();
 
-    virtual void listen() = 0;
+    const std::unique_ptr<basic_client_handler>& get_connected_client();
+
+    // close the current client (if such is conencted)
+    void close_curr_client();
 
 };
+
 
 #endif //ROOTKIT_BASIC_SERVER_H

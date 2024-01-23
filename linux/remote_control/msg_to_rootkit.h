@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/21/24.
-//
-
 #ifndef ROOTKIT_MSG_TO_ROOTKIT_H
 #define ROOTKIT_MSG_TO_ROOTKIT_H
 

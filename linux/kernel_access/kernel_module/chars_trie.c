@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/12/24.
-//
-
 #include <linux/slab.h>
 #include <linux/module.h>
 #include <linux/delay.h>

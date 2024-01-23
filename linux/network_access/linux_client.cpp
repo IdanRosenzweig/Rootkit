@@ -1,14 +1,10 @@
-//
-// Created by idan on 1/20/24.
-//
-
 #include "linux_client.h"
 
-//#include <sys/socket.h>
+#include <iostream>
+
 #include <arpa/inet.h>
 #include <cstring>
 #include <unistd.h>
-#include <iostream>
 
 void linux_client::connect() {
     my_sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -21,7 +17,6 @@ void linux_client::connect() {
     memset(&my_addr, '\x00', sizeof(struct sockaddr_in));
     my_addr.sin_family = AF_INET;
     my_addr.sin_port = htons(server_port);
-#define INET_PTON_ERROR (-1)
     if (inet_pton(AF_INET,
                   server_addr.c_str(),
                   (void *) &my_addr.sin_addr
@@ -30,6 +25,7 @@ void linux_client::connect() {
         return;
     }
 
+    std::cout << "connecting to the rootkit..." << std::endl;
     if (::connect(my_sd,
                   (struct sockaddr *) &my_addr,
                   sizeof(my_addr)
@@ -38,16 +34,13 @@ void linux_client::connect() {
         return;
     }
 
-    std::cout << "established connection\n";
+    std::cout << "connected successfully" << std::endl;
 
 }
 
 void linux_client::disconnect() {
     if (my_sd != SOCKET_ERROR)
         close(my_sd);
-
-    std::cout << "connection closed\n";
-
 }
 
 ssize_t linux_client::send_data(const char *buff, int count) {

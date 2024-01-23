@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/26/23.
-//
-
 #include "../../basic/process/basic_process_access.h"
 #include "../../basic/fs/basic_fs_access.h"
 
@@ -35,8 +31,8 @@ int start_proc(const char *exec_path, char *const args[], char *const env[]) {
         execve(exec_path, args, env);
         exit(0); // in case this is reached
     }
+    // else // parent process
     return pid;
-    // else // parent process_access
 }
 
 int start_proc(char *exec_path) {

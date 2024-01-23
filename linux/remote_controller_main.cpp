@@ -1,18 +1,11 @@
-//
-// Created by idan on 1/20/24.
-//
-
-#include <iostream>
-
 #include "remote_control/remote_control_client.h"
 
+#define REMOTE_PORT 1234
+#define REMOTE_ADDR "127.0.0.1"
+
 void execute() {
-    std::cout << "remove controller start" << std::endl;
-
-    remote_control_client client(1234, "127.0.0.1");
+    remote_control_client client(REMOTE_PORT, REMOTE_ADDR);
     client.run();
-
-    std::cout << "remove controller end"  << std::endl;
 
 }
 

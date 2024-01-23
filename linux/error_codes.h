@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/22/24.
-//
-
 #ifndef ROOTKIT_ERROR_CODES_H
 #define ROOTKIT_ERROR_CODES_H
 
@@ -15,6 +11,7 @@
 #define BIND_ERROR (-1)
 #define SOCKET_ERROR (-1)
 #define LISTEN_ERROR (-1)
+#define INET_PTON_ERROR (-1)
 
 #define SYSCALL_ERROR (-1)
 

@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/12/24.
-//
-
 #ifndef ROOTKIT_CHARS_TRIE_H
 #define ROOTKIT_CHARS_TRIE_H
 

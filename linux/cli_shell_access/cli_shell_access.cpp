@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/31/23.
-//
-
 #include "../../basic/shell/basic_cli_shell_access.h"
 
 #include "../error_codes.h"

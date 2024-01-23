@@ -1,14 +1,10 @@
-//
-// Created by idan on 1/14/24.
-//
-
 #include "hidden_paths.h"
 
 #include "chars_trie.h"
 
 static struct trie *trie = 0;
 
-void initialize_trie(void) {
+void initialize_hidden_paths_trie(void) {
     trie = create_trie();
 }
 
@@ -46,7 +42,7 @@ int is_path_arr_hidden(const char *path_arr[], int len) {
     else return 0;
 }
 
-void finish_trie(void) {
+void finish_hidden_paths_trie(void) {
     if (trie != 0)
         free_trie(trie);
 }

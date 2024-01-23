@@ -1,14 +1,9 @@
-//
-// Created by idan on 12/30/23.
-//
-
 #include "../../basic/fs/basic_fs_access.h"
 
 #include "../error_codes.h"
 
 #include <filesystem>
 
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>

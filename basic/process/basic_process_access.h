@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/26/23.
-//
-
 #ifndef ROOTKIT_BASIC_PROCESS_ACCESS_H
 #define ROOTKIT_BASIC_PROCESS_ACCESS_H
 

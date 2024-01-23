@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/7/24.
-//
-
 #ifndef ROOTKIT_KERNEL_ACCESS_H
 #define ROOTKIT_KERNEL_ACCESS_H
 
@@ -10,7 +6,6 @@
 
 #include "msg_to_module.h"
 #include "msg_to_user.h"
-
 
 #ifndef MODULE_DIR
 #error module dir is not defined

@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/11/24.
-//
-
 #ifndef ROOTKIT_OPERATIONS_PROTOCOL_H
 #define ROOTKIT_OPERATIONS_PROTOCOL_H
 

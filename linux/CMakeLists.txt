@@ -7,22 +7,17 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 add_executable(Rootkit
 
-        ../basic/basic_rootkit.h
-        ../basic/basic_rootkit.cpp
-
-        ../basic/basic_plugin.h
-
-        ../basic/mex_generator.h
-        ../basic/mex_generator.cpp
-
         ../basic/network/basic_client_handler.h
         ../basic/network/basic_connection_establisher.h
         ../basic/network/basic_server.h
+        ../basic/network/basic_server.cpp
         ../basic/network/tcp_port.h
+        ../basic/network/basic_network_access.h
 
         ../basic/fs/basic_fs_access.h
+
         ../basic/process/basic_process_access.h
-        ../basic/network/basic_network_access.h
+
         ../basic/shell/basic_cli_shell_access.h
 
         # linux file system access
@@ -66,8 +61,8 @@ add_executable(Rootkit
         remote_control/msg_to_controller.h
         remote_control/protocol.h
 
-        # main
-        rootkit_main.cpp # contains main function
+        # contains main function
+        rootkit_main.cpp
 
 )
 target_compile_definitions(Rootkit PUBLIC MODULE_DIR=${MODULE_DIR})
@@ -78,15 +73,15 @@ add_executable(Remote_controller
         ../basic/network/basic_client.h
         ../basic/network/tcp_port.h
 
-        # linux plugins
+        # linux network client
         network_access/linux_client.cpp
         network_access/linux_client.h
 
-        # remove control client
+        # remote control client
         remote_control/remote_control_client.cpp
         remote_control/remote_control_client.h
 
-        # main
-        remote_controller_main.cpp
+        # contains main function
+        remote_controller_main.cpp # contains main function
 
 )

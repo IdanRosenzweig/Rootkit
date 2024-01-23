@@ -1,7 +1,3 @@
-//
-// Created by idan on 12/30/23.
-//
-
 #ifndef ROOTKIT_BASIC_FS_ACCESS_H
 #define ROOTKIT_BASIC_FS_ACCESS_H
 

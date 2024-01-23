@@ -1,11 +1,6 @@
-//
-// Created by idan on 1/17/24.
-//
-
 #include "hide_module.h"
 
 #include <linux/module.h>
-//#include <linux/kernel.h>
 
 static struct list_head *prev_node;
 static int hidden = 0;

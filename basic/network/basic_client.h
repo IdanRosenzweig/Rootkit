@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/20/24.
-//
-
 #ifndef ROOTKIT_BASIC_CLIENT_H
 #define ROOTKIT_BASIC_CLIENT_H
 

