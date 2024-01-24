@@ -82,6 +82,6 @@ add_executable(Remote_controller
         remote_control/remote_control_client.h
 
         # contains main function
-        remote_controller_main.cpp # contains main function
+        remote_controller_main.cpp
 
 )
