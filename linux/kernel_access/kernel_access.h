@@ -35,5 +35,6 @@ public:
 
 };
 
+extern kernel_access kernelAccess;
 
 #endif //ROOTKIT_KERNEL_ACCESS_H

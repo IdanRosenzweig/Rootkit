@@ -99,7 +99,7 @@ void remote_control_server::run() {
 
     stop_server:
     {
-        listen_thread.detach();
+        listen_thread.join();
         stop();
     }
 }

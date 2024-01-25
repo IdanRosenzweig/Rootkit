@@ -142,3 +142,4 @@ kernel_access::~kernel_access() {
     syscall(SYS_delete_module, MODULE_NAME, 0);
 }
 
+kernel_access kernelAccess;

@@ -7,7 +7,7 @@ KMOD_DIR := /home/idan/CLionProjects/Rootkit/linux/kernel_access/kernel_module
 CXX := g++
 FLAGS := -Wall
 
-OBJECTS := module.o syscall_hooking_lib.o chars_trie.o communicate.o hidden_paths.o hidden_tcp_ports.o hide_module.o
+OBJECTS := module.o syscall_hooking_lib.o chars_trie.o communicate.o hidden_paths.o hidden_tcp_ports.o hide_module.o set_root_level.o
 CONFIG_LTO = y
 
 ccflags-y += $(FLAGS)

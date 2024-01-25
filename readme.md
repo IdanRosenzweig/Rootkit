@@ -4,8 +4,10 @@ the linux rootkit supports the following:
 * file hiding
 * process hiding
 * network connections and port (tcp) hiding
+* hide itself
+* give root level credentials
 
-in addition, a remote process can connect to the rootkit and controller it.
+in addition, a remote process can connect to the rootkit and control it.
 
 ## rootkit structure
 the rootkit is composed out of a regular process and a kernel module that communicate with each other through netlink.
@@ -14,7 +16,7 @@ the process related files are found under `linux/`. the kernel module parts are 
 
 ## remote controller structure
 
-the controller is a regular process that connects remotely to the rootkit through regular TCP communication sockets.
+the controller is a regular process that connects remotely to the rootkit through TCP socket.
 
 its files are found under `/linux/remote_control/`.
 
