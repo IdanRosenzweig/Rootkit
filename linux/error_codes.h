@@ -6,6 +6,7 @@
 
 #define READ_ERROR (-1)
 #define CLOSE_ERROR (-1)
+#define STAT_ERROR (-1)
 
 #define ACCEPT_ERROR (-1)
 #define BIND_ERROR (-1)
